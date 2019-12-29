@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#7C211A</color>
+
+
+    <color name="main_background_start">#8F220C</color>
+    <color name="main_background_end">#520E0E</color>
+
+    <color name="saldo_label_text">#FAF1F1</color>
+    <color name="saldo_text">#FDDCB3</color>
+
+    <color name="btn_stroke">#FAFAF9</color>
+    <color name="btn_stroke_pressed">#830D0D</color>
+    <color name="btn_text">#FFFFFF</color>
+    <color name="btn_solid">#00912121</color>
+    <color name="btn_solid_pressed">#490909</color>
+
+    <color name="description_frame">#531919</color>
+    <color name="description_board">#CE330000</color>
+    <color name="description_board_header">#E8330000</color>
+
+    <color name="list_divider">#FFC107</color>
+    <color name="selected_row">#CE330000</color>
+
+    <color name="transparent">#00FFFFFF</color>
+
+
+</resources>

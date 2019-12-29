@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/main_background"
+    tools:context=".StartActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+
+        <Button
+            android:id="@+id/btn_view_database"
+            android:layout_width="220dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="80dp"
+            android:background="@drawable/button_selector"
+            android:elevation="10dp"
+            android:text="@string/btn_view_database"
+            android:textColor="@color/btn_text"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="@+id/btn_add_quick_transaction"
+            app:layout_constraintTop_toBottomOf="@+id/btn_add_quick_transaction" />
+
+        <Button
+            android:id="@+id/btn_add_transaction"
+            android:layout_width="220dp"
+            android:layout_height="80dp"
+            android:background="@drawable/button_selector"
+            android:elevation="10dp"
+            android:text="@string/btn_add_transaction"
+            android:textColor="@color/btn_text"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/btn_add_quick_transaction"
+            android:layout_width="220dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/button_selector"
+            android:elevation="10dp"
+            android:text="@string/btn_add_quick_transaction"
+            android:textColor="@color/btn_text"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="@+id/btn_add_transaction"
+            app:layout_constraintTop_toBottomOf="@+id/btn_add_transaction" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tv_saldo_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="@string/tv_saldo_label"
+            android:textColor="@color/saldo_label_text"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/tv_start_total_ballance"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_start_total_ballance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Robert    - 329 zł"
+            android:textColor="@color/saldo_text"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

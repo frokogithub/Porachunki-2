@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/main_background"
+    tools:context=".QuicTransactionActivity">
+
+    <TextView
+        android:id="@+id/tv_Date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="@string/tv_Date"
+        android:textColor="@color/saldo_label_text"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_transaction_date"
+        app:layout_constraintEnd_toStartOf="@+id/tv_transaction_date"
+        app:layout_constraintTop_toTopOf="@+id/tv_transaction_date" />
+
+    <TextView
+        android:id="@+id/tv_Robert"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="@string/tv_Robert"
+        android:textColor="@color/saldo_label_text"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/et_transaction_robert"
+        app:layout_constraintEnd_toStartOf="@+id/et_transaction_robert"
+        app:layout_constraintTop_toTopOf="@+id/et_transaction_robert" />
+
+    <TextView
+        android:id="@+id/tv_Paulina"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="@string/tv_Paulina"
+        android:textColor="@color/saldo_label_text"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/et_transaction_paulina"
+        app:layout_constraintEnd_toStartOf="@+id/et_transaction_paulina"
+        app:layout_constraintTop_toTopOf="@+id/et_transaction_paulina" />
+
+    <TextView
+        android:id="@+id/tv_total"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="@string/tv_total"
+        android:textColor="@color/saldo_label_text"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/et_transaction_total"
+        app:layout_constraintEnd_toStartOf="@+id/et_transaction_total"
+        app:layout_constraintTop_toTopOf="@+id/et_transaction_total"
+        app:layout_constraintVertical_bias="0.36" />
+
+    <EditText
+        android:id="@+id/et_transaction_total"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="40dp"
+        android:background="@android:color/white"
+        android:ems="6"
+        android:gravity="center_horizontal"
+        android:imeOptions="actionDone"
+        android:inputType="numberDecimal"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:textSize="22sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/et_transaction_paulina"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="@android:color/white"
+        android:ems="6"
+        android:gravity="center_horizontal"
+        android:imeOptions="actionDone"
+        android:inputType="numberDecimal"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:textSize="22sp"
+        app:layout_constraintEnd_toEndOf="@+id/et_transaction_total"
+        app:layout_constraintTop_toBottomOf="@+id/et_transaction_total" />
+
+    <EditText
+        android:id="@+id/et_transaction_robert"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="@android:color/white"
+        android:ems="6"
+        android:gravity="center_horizontal"
+        android:imeOptions="actionDone"
+        android:inputType="numberDecimal"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:textSize="22sp"
+        app:layout_constraintEnd_toEndOf="@+id/et_transaction_paulina"
+        app:layout_constraintTop_toBottomOf="@+id/et_transaction_paulina" />
+
+    <TextView
+        android:id="@+id/tv_transaction_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="@android:color/white"
+        android:ems="6"
+        android:gravity="center_horizontal"
+        android:imeOptions="actionDone"
+        android:inputType="date"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:textColor="@android:color/black"
+        android:textSize="22sp"
+        app:layout_constraintEnd_toEndOf="@+id/et_transaction_robert"
+        app:layout_constraintTop_toBottomOf="@+id/et_transaction_robert" />
+
+    <Button
+        android:id="@+id/bt_ok_transaction"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        android:background="@drawable/button_selector"
+        android:text="@string/btn_ok"
+        android:textColor="@color/btn_text"
+        app:layout_constraintBottom_toBottomOf="@+id/bt_cancel_transaction"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/bt_cancel_transaction" />
+
+    <Button
+        android:id="@+id/bt_cancel_transaction"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="32dp"
+        android:background="@drawable/button_selector"
+        android:text="@string/btn_cancel"
+        android:textColor="@color/btn_text"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/bt_ok_transaction"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/et_transaction_description"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_transaction_date">
+
+        <RadioButton
+            android:id="@+id/rb_paulina_pays"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:button="@android:drawable/btn_radio"
+            android:layoutDirection="rtl"
+            android:paddingStart="20dp"
+            android:text="@string/Paulina_pays"
+            android:textColor="@color/saldo_label_text"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/rb_robert_pays"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <RadioButton
+            android:id="@+id/rb_robert_pays"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:button="@android:drawable/btn_radio"
+            android:layoutDirection="rtl"
+            android:paddingStart="36dp"
+            android:text="@string/Robert_pays"
+            android:textColor="@color/saldo_label_text"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rb_paulina_pays" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <EditText
+        android:id="@+id/et_transaction_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp"
+        android:background="@android:color/white"
+        android:ems="12"
+        android:gravity="top|left"
+        android:inputType="textMultiLine"
+        android:lines="3"
+        android:maxLines="3"
+        android:minLines="3"
+        android:padding="10dp"
+        android:singleLine="false"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/bt_cancel_transaction"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.506"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="Opis:"
+        android:textColor="@color/saldo_label_text"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/et_transaction_description"
+        app:layout_constraintStart_toStartOf="@+id/et_transaction_description" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

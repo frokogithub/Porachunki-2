@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Porachunki</string>
+
+    <string name="tv_saldo_label">Aktualny stan:</string>
+    <string name="tv_total">Łącznie:</string>
+    <string name="tv_Paulina">Paulina:</string>
+    <string name="tv_Robert">Robert:</string>
+    <string name="tv_Date">Data:</string>
+
+    <string name="btn_add_transaction">"Dodaj  Porachunki"</string>
+    <string name="btn_add_quick_transaction">"Prosty  Deal"</string>
+    <string name="btn_view_database">Historia Porachunków</string>
+    <string name="btn_ok">Zatwierdź</string>
+    <string name="btn_cancel">Anuluj</string>
+
+    <string name="kwota_label">Kwota:</string>
+    <string name="Robert_to_Paulina">"Robert  >>>  Paulina"</string>
+    <string name="Paulina_to_Robert">"Paulina  >>>  Robert"</string>
+    <string name="Robert_pays">płacił  Robert</string>
+    <string name="Paulina_pays">płaciła  Paulina</string>
+
+    <string name="alert_warning">Czy na pewno usunąć wpis?</string>
+</resources>
