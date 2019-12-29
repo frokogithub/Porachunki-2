@@ -20,18 +20,19 @@ import java.util.Date;
 
 public class StartActivity extends AppCompatActivity {
 
+    // statyczne pola dostępne z innych klas
     public static float totalBallance = 0;
     public static ArrayList<RowData> dataList = new ArrayList<>();
-    private final static String KEY_DATE = "date";
-    private final static String KEY_TOTAL = "total";
-    private final static String KEY_PPART = "paulina_part";
-    private final static String KEY_RPART = "robert_part";
-    private final static String KEY_PAYMENT = "payment";
-    private final static String KEY_DESCRIPTION = "description";
-    private final static String KEY_PBILANS = "paulina_bilans";
-    private final static String KEY_RBILANS = "robert_bilans";
-    private final static String KEY_SALDO = "saldo";
-    private final static String KEY_ARRAY = "all data";
+//    private final static String KEY_DATE = "date";
+//    private final static String KEY_TOTAL = "total";
+//    private final static String KEY_PPART = "paulina_part";
+//    private final static String KEY_RPART = "robert_part";
+//    private final static String KEY_PAYMENT = "payment";
+//    private final static String KEY_DESCRIPTION = "description";
+//    private final static String KEY_PBILANS = "paulina_bilans";
+//    private final static String KEY_RBILANS = "robert_bilans";
+//    private final static String KEY_SALDO = "saldo";
+//    private final static String KEY_ARRAY = "all data";
 
     TextView tvTotalBallance;
 
@@ -45,6 +46,8 @@ public class StartActivity extends AppCompatActivity {
         decorView.setSystemUiVisibility(uiOptions);
 
         getSupportActionBar().hide();
+
+        // aktualizuje saldo przy każdym powrocie do aktywności
         updateTotalBallance();
     }
 
@@ -57,10 +60,6 @@ public class StartActivity extends AppCompatActivity {
 
         setButtons();
         setDataList();
-
-//        setList_TEST();
-//        setRowDataList();
-
     }
 
     private void setButtons(){
@@ -91,10 +90,22 @@ public class StartActivity extends AppCompatActivity {
         });
     }
 
+    // Tworzy tablicę z danych zapisanych w pliku JSON
     private void setDataList(){
 
+        final String KEY_DATE = "date";
+        final String KEY_TOTAL = "total";
+        final String KEY_PPART = "paulina_part";
+        final String KEY_RPART = "robert_part";
+        final String KEY_PAYMENT = "payment";
+        final String KEY_DESCRIPTION = "description";
+        final String KEY_PBILANS = "paulina_bilans";
+        final String KEY_RBILANS = "robert_bilans";
+        final String KEY_SALDO = "saldo";
+        final String KEY_ARRAY = "all data";
+
         Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DATE, -7);
+        cal.add(Calendar.DATE, -30); //30 dni temu
         Date date = null;
         Date monthAgo = cal.getTime();
 
@@ -127,11 +138,12 @@ public class StartActivity extends AppCompatActivity {
                     rd.setBilansR((float)jsonArray.getJSONObject(i).getDouble(KEY_RBILANS));
                     rd.setSaldo((float)jsonArray.getJSONObject(i).getDouble(KEY_SALDO));
 
+                    // Nie wpisuje do tabeli rekordów starszych niż miesiąc
                     if (date.after(monthAgo)) dataList.add(rd);
 
                     if(i==0){
-                        float saldo = (float)jsonArray.getJSONObject(i).getDouble(KEY_SALDO);
-                        totalBallance = saldo;
+                        totalBallance = (float)jsonArray.getJSONObject(i).getDouble(KEY_SALDO);
+//                        totalBallance = saldo;
                     }
 
                 }
@@ -142,6 +154,8 @@ public class StartActivity extends AppCompatActivity {
         }
     }
 
+
+    // Przygotowuje String do wyświetlenie całkowitego salda
     private void updateTotalBallance(){
         String totalballanceString;
         String pln = " zł";
@@ -154,13 +168,5 @@ public class StartActivity extends AppCompatActivity {
             totalballanceString = "Zobowiązania uregulowane";
         }
         tvTotalBallance.setText(totalballanceString);
-    }
-
-    void test(){
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DATE, -7);
-        Date d = cal.getTime();
-
-        System.out.println("Date = "+ cal.getTime());
     }
 }

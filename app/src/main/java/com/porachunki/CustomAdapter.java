@@ -62,9 +62,9 @@ public class CustomAdapter extends BaseAdapter {
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.lv_item, null, true);
 
-            holder.tvRowDate = (TextView) convertView.findViewById(R.id.tv_row_date);
-            holder.tvRowTotal = (TextView) convertView.findViewById(R.id.tv_row_total);
-            holder.tvRowDescription = (TextView) convertView.findViewById(R.id.tv_row_description);
+            holder.tvRowDate = convertView.findViewById(R.id.tv_row_date);
+            holder.tvRowTotal = convertView.findViewById(R.id.tv_row_total);
+            holder.tvRowDescription = convertView.findViewById(R.id.tv_row_description);
             holder.clRowParent = convertView.findViewById(R.id.cl_row_parent);
 
             convertView.setTag(holder);
@@ -75,14 +75,16 @@ public class CustomAdapter extends BaseAdapter {
 
         DateHelper dh = new DateHelper();
         holder.tvRowDate.setText(dh.dateToCharString(rowDataArrayList.get(position).getDate()));
-        holder.tvRowTotal.setText(String.format("%.02f",rowDataArrayList.get(position).getTotal())+" zł");
+        String total = String.format("%.02f",rowDataArrayList.get(position).getTotal())+" zł";
+        holder.tvRowTotal.setText(total);
 
-        //wyświetla pierwszy wyraz
+        //wyświetla tylko pierwszy wyraz
         String descriptionFull = rowDataArrayList.get(position).getDescription();
         String[] desc = descriptionFull.split(" ");
         holder.tvRowDescription.setText(desc[0]);
 
 
+        // zaznacza wiersz na wskazanej pozycji
         if (position == HistoryActivity.forceCheckedPosition){
             holder.clRowParent.setBackgroundColor(context.getResources().getColor(R.color.selected_row));
         }else{

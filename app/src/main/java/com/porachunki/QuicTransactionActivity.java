@@ -42,17 +42,6 @@ public class QuicTransactionActivity extends AppCompatActivity {
     private int TVmonth;
     private int TVyear;
 
-//    private final static String KEY_DATE = "date";
-//    private final static String KEY_TOTAL = "total";
-//    private final static String KEY_PPART = "paulina_part";
-//    private final static String KEY_RPART = "robert_part";
-//    private final static String KEY_PAYMENT = "payment";
-//    private final static String KEY_DESCRIPTION = "description";
-//    private final static String KEY_PBILANS = "paulina_bilans";
-//    private final static String KEY_RBILANS = "robert_bilans";
-//    private final static String KEY_SALDO = "saldo";
-//    private final static String KEY_ARRAY = "all data";
-
     private int addedRowIndex;
 
 
@@ -152,6 +141,11 @@ public class QuicTransactionActivity extends AppCompatActivity {
                 if (tvKwota.getText().toString().matches("")){
                     Toast.makeText(getApplicationContext(),"Wypełnij pole Kwota", Toast.LENGTH_SHORT).show();
                 }else{
+                    // Wpisuje nową paczkę danych to tabeli
+                    // Segreguje po dacie
+                    // oblicza częściowe salda (konieczne po kazdym sortowaniu)
+                    // Tworzy plik JSON
+                    // Informuje następną aktywność o pozycji stworzonego wpisu (potrzebne do zaznaczenia go i wyświetlenia szczegółów transakcji)
                     updateDataList();
                     sortDatalist(StartActivity.dataList);
                     salda();
@@ -173,12 +167,14 @@ public class QuicTransactionActivity extends AppCompatActivity {
 
     }
 
+    /* Dane z ekranu wpisuje do paczki danych wiersza i dodaje ją do tablicy */
     private void updateDataList(){
         RowData rd = new RowData();
         Date date = new Date();
         date = new DateHelper().IntToDate(TVday, TVmonth, TVyear);
         Calculator calculator = new Calculator();
 
+        // flaguje wpis żeby odnależć go po sortowaniu
         rd.setJustAddedFlag(true);
         rd.setDate(date);
 
@@ -188,7 +184,7 @@ public class QuicTransactionActivity extends AppCompatActivity {
         float robertPart = 0;
         float paulinaPart = 0;
 
-        String payment = null;
+        String payment;
         if(rbPaulinaToRobert.isChecked()){
             payment = "Paulina";
             robertPart = total;
@@ -205,9 +201,11 @@ public class QuicTransactionActivity extends AppCompatActivity {
         rd.setBilansP(calculator.bilans(total, robertPart, paulinaPart, payment)[0]);
         rd.setBilansR(calculator.bilans(total, robertPart, paulinaPart, payment)[1]);
 
+        // wymusza zapis danych na pierwszej pozycji
         StartActivity.dataList.add(0,rd);
     }
 
+    /* Sortuje tabelę od najmłodszego do najstarszego rekordu*/
     private void sortDatalist(ArrayList list){
         Collections.sort(list, new Comparator<RowData>() {
             @Override
@@ -215,12 +213,9 @@ public class QuicTransactionActivity extends AppCompatActivity {
                 return rm2.getDate().compareTo(rm1.getDate());
             }
         });
-//        for(int i = 0; i < 10; i++){
-//            RowData rm = (RowData)list.get(i);
-//            Log.d("kroko_sort", rm.getDate()+" - "+rm.getTotal());
-//        }
     }
 
+    /* Znajduje pozycję oflagowanego wcześniej rekordu */
     private int findAddedRowIndex(){
         for (int i=0;i<StartActivity.dataList.size(); i++){
             if(StartActivity.dataList.get(i).isJustAddedFlag()){
@@ -231,6 +226,10 @@ public class QuicTransactionActivity extends AppCompatActivity {
         return -1;
     }
 
+    /* Oblicza saldo częściowe dla każdego rekordu
+    // licząc od najstarszego (Wcześniej konieczne sortowanie tabeli)
+    // Ostatnie (i=0) saldo częściowe jest saldem całkowitym.
+    */
     private void salda(){
         float saldo = 0;
         RowData rd = new RowData();
@@ -248,6 +247,7 @@ public class QuicTransactionActivity extends AppCompatActivity {
         StartActivity.totalBallance = saldo;
     }
 
+    // Z danych tabeli tworzy plik JSON i przekazuje do zapisania
     private void makeJsonFile(){
 
         final String KEY_DATE = "date";
