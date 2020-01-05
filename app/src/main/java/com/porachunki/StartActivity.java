@@ -2,6 +2,7 @@ package com.porachunki;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -23,16 +24,7 @@ public class StartActivity extends AppCompatActivity {
     // statyczne pola dostępne z innych klas
     public static float totalBallance = 0;
     public static ArrayList<RowData> dataList = new ArrayList<>();
-//    private final static String KEY_DATE = "date";
-//    private final static String KEY_TOTAL = "total";
-//    private final static String KEY_PPART = "paulina_part";
-//    private final static String KEY_RPART = "robert_part";
-//    private final static String KEY_PAYMENT = "payment";
-//    private final static String KEY_DESCRIPTION = "description";
-//    private final static String KEY_PBILANS = "paulina_bilans";
-//    private final static String KEY_RBILANS = "robert_bilans";
-//    private final static String KEY_SALDO = "saldo";
-//    private final static String KEY_ARRAY = "all data";
+
 
     TextView tvTotalBallance;
 
@@ -109,7 +101,9 @@ public class StartActivity extends AppCompatActivity {
         Date date = null;
         Date monthAgo = cal.getTime();
 
-        dataList.clear(); //todo: czy potrzebne?
+        boolean isInitialBallanceUpdated = false;
+
+//        dataList.clear(); //todo: czy potrzebne?
         JsonFileUtility jsonFileUtility = new JsonFileUtility(getApplicationContext());
         JSONObject loadedJsnObject = jsonFileUtility.loadJson();
 
@@ -118,7 +112,7 @@ public class StartActivity extends AppCompatActivity {
             try {
                 JSONArray jsonArray = loadedJsnObject.getJSONArray(KEY_ARRAY);
 
-                Log.d("kroko_JSONObject", loadedJsnObject.toString());
+//                Log.d("kroko_JSONObject", loadedJsnObject.toString());
 
                 for(int i=0; i<jsonArray.length(); i++){
                     RowData rd = new RowData();
@@ -136,10 +130,22 @@ public class StartActivity extends AppCompatActivity {
                     rd.setDescription(jsonArray.getJSONObject(i).getString(KEY_DESCRIPTION));
                     rd.setBilansP((float)jsonArray.getJSONObject(i).getDouble(KEY_PBILANS));
                     rd.setBilansR((float)jsonArray.getJSONObject(i).getDouble(KEY_RBILANS));
-                    rd.setSaldo((float)jsonArray.getJSONObject(i).getDouble(KEY_SALDO));
+                    float saldo = (float)jsonArray.getJSONObject(i).getDouble(KEY_SALDO);
+                    rd.setSaldo(saldo);
 
+//                    Log.d("kroko", monthAgo.toString()+"  miesiąc temu");
+//                    Log.d("kroko", date.toString()+"  data");
                     // Nie wpisuje do tabeli rekordów starszych niż miesiąc
-                    if (date.after(monthAgo)) dataList.add(rd);
+                    if (date.after(monthAgo)){
+//                        Log.d("kroko", date.toString()+"  w if");
+                        dataList.add(rd);
+                    }else{
+                        // zapisuje saldo z pierwszego niewpisanego rekordu jako saldo początkowe (do funkcji "salda")
+                        if( ! isInitialBallanceUpdated){
+                            isInitialBallanceUpdated = true;
+                            writeInitialBallance(saldo);
+                        }
+                    }
 
                     if(i==0){
                         totalBallance = (float)jsonArray.getJSONObject(i).getDouble(KEY_SALDO);
@@ -151,6 +157,8 @@ public class StartActivity extends AppCompatActivity {
                 e.printStackTrace();
                 Log.d("kroko_JSON e", "e");
             }
+        }else{
+            Log.d("kroko_JSON test", "JSON object NULL");
         }
     }
 
@@ -168,5 +176,14 @@ public class StartActivity extends AppCompatActivity {
             totalballanceString = "Zobowiązania uregulowane";
         }
         tvTotalBallance.setText(totalballanceString);
+    }
+
+    private void writeInitialBallance(float initialBallance){
+        final String KEY_INITIAL_BALLANCE = "initial_ballance";
+        SharedPreferences sharedPreferences = getSharedPreferences("MySharedPref", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putFloat(KEY_INITIAL_BALLANCE, initialBallance);
+        editor.apply();
     }
 }

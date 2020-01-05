@@ -78,21 +78,16 @@ public class JsonFileUtility {
 
 //            String FILENAME = fileName;
 
-            byte[] bytes = new byte[1024];
+//            byte[] bytes = new byte[1024];
 
             String folder;
-//            if(loadFromTempFolder){
-//                folder = context.getFilesDir().getAbsolutePath() + File.separator + TEMP_FOLDERNAME;
-//            }else{
-//                folder = context.getFilesDir().getAbsolutePath() + File.separator + FOLDERNAME;
-//            }
+
             folder = context.getFilesDir().getAbsolutePath() + File.separator + FOLDERNAME;
-
-
-//            String folder = context.getFilesDir().getAbsolutePath() + File.separator + FOLDERNAME;
 
             File subFolder = new File(folder);
             FileInputStream outputStream = new FileInputStream(new File(subFolder, FILENAME));
+
+            byte[] bytes = new byte[outputStream.available()];
 
             outputStream.read(bytes);
             outputStream.close();
@@ -100,15 +95,17 @@ public class JsonFileUtility {
             receivedString = new String(bytes);
 
         } catch (FileNotFoundException e) {
-            Log.e("ERROR", e.toString());
+            Log.e("kroko_loadJson_FileNotFoundException", e.toString());
         } catch (IOException e) {
-            Log.e(TAG, e.toString());
+            Log.e("kroko_loadJson_IOException", e.toString());
         }
 
+        Log.d("kroko_receivedString", receivedString);
         try {
             jo = new JSONObject(receivedString);
         }catch (JSONException e){
-            e.printStackTrace();
+            Log.e("kroko_loadJson_JSONException", e.toString());
+//            e.printStackTrace();
         }
         return jo;
     }

@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -106,8 +108,13 @@ public class HistoryActivity extends AppCompatActivity {
                 deleteDialog.setOnDeleteClickListener(new OnDeleteClickListener() {
                     @Override
                     public void onDeleteClick(int posiition) {
+                        // jeśli kasowany jest ostatni (najstarszy) rekord, zapisujemy jego saldo jako saldo początkowe
+                        int lastPosition = StartActivity.dataList.size() - 1;
+                        if(posiition==lastPosition){
+                            writeInitialBallance(StartActivity.dataList.get(posiition).getSaldo());
+                        }
                         StartActivity.dataList.remove(posiition);
-                        salda();
+                        salda(readInitialBallance());
                         makeJsonFile();
                         forceCheckedPosition = 0;
                         if (!StartActivity.dataList.isEmpty()){
@@ -190,8 +197,12 @@ public class HistoryActivity extends AppCompatActivity {
         tvSaldo.setText("-");
     }
 
-    private void salda(){
-        float saldo = 0;
+    /* Oblicza saldo częściowe dla każdego rekordu
+     // licząc salda początkowego (Wcześniej konieczne sortowanie tabeli)
+     // Ostatnie (i=0) saldo częściowe jest saldem całkowitym.
+     */
+    private void salda(float initialBallance){
+        float saldo = initialBallance;
         RowData rd = new RowData();
         for(int i = StartActivity.dataList.size()-1; i>=0; i--){
             float bilansP = StartActivity.dataList.get(i).getBilansP();
@@ -200,12 +211,30 @@ public class HistoryActivity extends AppCompatActivity {
             if(i<StartActivity.dataList.size()-1){
                 saldo = StartActivity.dataList.get(i+1).getSaldo() + bilansP-bilansR;
             }else{
-                saldo =bilansP-bilansR;
+                saldo =initialBallance + bilansP-bilansR;
             }
             StartActivity.dataList.get(i).setSaldo(saldo);
         }
         StartActivity.totalBallance = saldo;
     }
+
+    private float readInitialBallance(){
+        final String KEY_INITIAL_BALLANCE = "initial_ballance";
+        SharedPreferences sh = getSharedPreferences("MySharedPref", MODE_PRIVATE);
+
+        return sh.getFloat(KEY_INITIAL_BALLANCE, 0);
+    }
+
+    private void writeInitialBallance(float initialBallance){
+        final String KEY_INITIAL_BALLANCE = "initial_ballance";
+        SharedPreferences sharedPreferences = getSharedPreferences("MySharedPref", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putFloat(KEY_INITIAL_BALLANCE, initialBallance);
+        editor.apply();
+    }
+
+
     private void makeJsonFile(){
 
         final String KEY_DATE = "date";

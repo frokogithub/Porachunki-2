@@ -5,11 +5,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -97,6 +99,7 @@ public class QuicTransactionActivity extends AppCompatActivity {
         tvDescription.setImeOptions(EditorInfo.IME_ACTION_DONE);
         tvDescription.setRawInputType(InputType.TYPE_CLASS_TEXT);
 
+
         tvDate.setText(dateHelper.getCurrentDateString());
 
         tvDate.setOnClickListener(new View.OnClickListener() {
@@ -118,6 +121,7 @@ public class QuicTransactionActivity extends AppCompatActivity {
                 datePickerDialog.show();
             }
         });
+
 
         rbPaulinaToRobert.setChecked(true);
         rbPaulinaToRobert.setOnClickListener(new View.OnClickListener() {
@@ -148,7 +152,7 @@ public class QuicTransactionActivity extends AppCompatActivity {
                     // Informuje następną aktywność o pozycji stworzonego wpisu (potrzebne do zaznaczenia go i wyświetlenia szczegółów transakcji)
                     updateDataList();
                     sortDatalist(StartActivity.dataList);
-                    salda();
+                    salda(readInitialBallance());
                     makeJsonFile();
                     addedRowIndex = findAddedRowIndex();
                     HistoryActivity.start(getApplicationContext(), addedRowIndex);
@@ -227,11 +231,12 @@ public class QuicTransactionActivity extends AppCompatActivity {
     }
 
     /* Oblicza saldo częściowe dla każdego rekordu
-    // licząc od najstarszego (Wcześniej konieczne sortowanie tabeli)
+    // licząc salda początkowego (Wcześniej konieczne sortowanie tabeli)
     // Ostatnie (i=0) saldo częściowe jest saldem całkowitym.
     */
-    private void salda(){
-        float saldo = 0;
+    private void salda(float initialBallance){
+        Log.d("kroko initialBallance", String.valueOf(initialBallance));
+        float saldo = initialBallance;
         RowData rd = new RowData();
         for(int i = StartActivity.dataList.size()-1; i>=0; i--){
             float bilansP = StartActivity.dataList.get(i).getBilansP();
@@ -240,11 +245,18 @@ public class QuicTransactionActivity extends AppCompatActivity {
             if(i<StartActivity.dataList.size()-1){
                 saldo = StartActivity.dataList.get(i+1).getSaldo() + bilansP-bilansR;
             }else{
-                saldo =bilansP-bilansR;
+                saldo =initialBallance + bilansP-bilansR;
             }
             StartActivity.dataList.get(i).setSaldo(saldo);
         }
         StartActivity.totalBallance = saldo;
+    }
+
+    private float readInitialBallance(){
+        final String KEY_INITIAL_BALLANCE = "initial_ballance";
+        SharedPreferences sh = getSharedPreferences("MySharedPref", MODE_PRIVATE);
+
+        return sh.getFloat(KEY_INITIAL_BALLANCE, 0);
     }
 
     // Z danych tabeli tworzy plik JSON i przekazuje do zapisania

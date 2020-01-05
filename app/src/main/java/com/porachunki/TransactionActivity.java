@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -144,7 +145,7 @@ public class TransactionActivity extends AppCompatActivity {
                 }else{
                     updateDataList();
                     sortDatalist(StartActivity.dataList);
-                    salda();
+                    salda(readInitialBallance());
                     makeJsonFile();
                     addedRowIndex = findAddedRowIndex();
                     HistoryActivity.start(getApplicationContext(), addedRowIndex);
@@ -231,8 +232,12 @@ public class TransactionActivity extends AppCompatActivity {
         return -1;
     }
 
-    private void salda(){
-        float saldo = 0;
+    /* Oblicza saldo częściowe dla każdego rekordu
+     // licząc salda początkowego (Wcześniej konieczne sortowanie tabeli)
+     // Ostatnie (i=0) saldo częściowe jest saldem całkowitym.
+     */
+    private void salda(float initialBallance){
+        float saldo = initialBallance;
         RowData rd = new RowData();
         for(int i = StartActivity.dataList.size()-1; i>=0; i--){
             float bilansP = StartActivity.dataList.get(i).getBilansP();
@@ -241,11 +246,18 @@ public class TransactionActivity extends AppCompatActivity {
             if(i<StartActivity.dataList.size()-1){
                 saldo = StartActivity.dataList.get(i+1).getSaldo() + bilansP-bilansR;
             }else{
-                saldo =bilansP-bilansR;
+                saldo =initialBallance + bilansP-bilansR;
             }
             StartActivity.dataList.get(i).setSaldo(saldo);
         }
         StartActivity.totalBallance = saldo;
+    }
+
+    private float readInitialBallance(){
+        final String KEY_INITIAL_BALLANCE = "initial_ballance";
+        SharedPreferences sh = getSharedPreferences("MySharedPref", MODE_PRIVATE);
+
+        return sh.getFloat(KEY_INITIAL_BALLANCE, 0);
     }
 
     private void makeJsonFile(){
