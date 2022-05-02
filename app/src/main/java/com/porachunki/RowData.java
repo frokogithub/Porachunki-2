@@ -6,14 +6,14 @@ public class RowData {
 
     private boolean justAddedFlag = false;
     private Date date;
-    private float total;
+    private float bill;
     private float Person1Part;
     private float Person2Part;
-    private String payment;
+    private String whoPays;
     private String description;
-    private float bilansR;
-    private float bilansP;
-    private float saldo;
+    private float Person2TransationBalance;
+    private float person1TransationBalance;
+    private float balance;
 
     public boolean isJustAddedFlag() {
         return justAddedFlag;
@@ -32,12 +32,12 @@ public class RowData {
         this.date = date;
     }
 
-    public float getTotal() {
-        return total;
+    public float getBill() {
+        return bill;
     }
 
-    public void setTotal(float total) {
-        this.total = total;
+    public void setBill(float bill) {
+        this.bill = bill;
     }
 
     public float getPerson2Part() {
@@ -56,12 +56,12 @@ public class RowData {
         Person1Part = person1Part;
     }
 
-    public String getPayment() {
-        return payment;
+    public String getWhoPays() {
+        return whoPays;
     }
 
-    public void setPayment(String payment) {
-        this.payment = payment;
+    public void setWhoPays(String whoPays) {
+        this.whoPays = whoPays;
     }
 
     public String getDescription() {
@@ -72,27 +72,27 @@ public class RowData {
         this.description = description;
     }
 
-    public float getBilansP() {
-        return bilansP;
+    public float getPerson1TransationBalance() {
+        return person1TransationBalance;
     }
 
-    public void setBilansP(float bilansP) {
-        this.bilansP = bilansP;
+    public void setPerson1TransationBalance(float person1TransationBalance) {
+        this.person1TransationBalance = person1TransationBalance;
     }
 
-    public float getBilansR() {
-        return bilansR;
+    public float getPerson2TransationBalance() {
+        return Person2TransationBalance;
     }
 
-    public void setBilansR(float bilansR) {
-        this.bilansR = bilansR;
+    public void setPerson2TransationBalance(float Person2TransationBalance) {
+        this.Person2TransationBalance = Person2TransationBalance;
     }
 
-    public float getSaldo() {
-        return saldo;
+    public float getBalance() {
+        return balance;
     }
 
-    public void setSaldo(float saldo) {
-        this.saldo = saldo;
+    public void setBalance(float balance) {
+        this.balance = balance;
     }
 }

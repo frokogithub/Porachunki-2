@@ -1,7 +1,6 @@
 package com.porachunki;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,7 +74,7 @@ public class CustomAdapter extends BaseAdapter {
 
         DateHelper dh = new DateHelper();
         holder.tvRowDate.setText(dh.dateToCharString(rowDataArrayList.get(position).getDate()));
-        String total = String.format("%.02f",rowDataArrayList.get(position).getTotal())+" zł";
+        String total = String.format("%.02f",rowDataArrayList.get(position).getBill())+" zł";
         holder.tvRowTotal.setText(total);
 
         //wyświetla tylko pierwszy wyraz

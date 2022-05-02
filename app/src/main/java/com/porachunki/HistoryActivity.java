@@ -134,12 +134,12 @@ public class HistoryActivity extends AppCompatActivity {
 
         String pln = " zł";
         String date = new DateHelper().dateToString(rd.getDate());
-        float total = rd.getTotal();
+        float total = rd.getBill();
         float robertPart = rd.getPerson2Part();
         float paulinaPart = rd.getPerson1Part();
-        String payment = rd.getPayment();
-        float bilansP = rd.getBilansP();
-        float bilansR = rd.getBilansR();
+        String payment = rd.getWhoPays();
+        float bilansP = rd.getPerson1TransationBalance();
+        float bilansR = rd.getPerson2TransationBalance();
         String description = rd.getDescription();
         //int saldo ;
 
@@ -171,7 +171,7 @@ public class HistoryActivity extends AppCompatActivity {
         tvBilans.setText(bilans);
         tvDescription.setText(description);
 
-        float saldo = StartActivity.dataList.get(position).getSaldo();
+        float saldo = StartActivity.dataList.get(position).getBalance();
         String saldoString;
         if(saldo>0){
             saldoString = "Saldo:    Paulina  -"+String.format("%.02f",saldo)+pln;//String.valueOf(saldo)+pln;
@@ -202,15 +202,15 @@ public class HistoryActivity extends AppCompatActivity {
         float saldo = initialBallance;
         RowData rd = new RowData();
         for(int i = StartActivity.dataList.size()-1; i>=0; i--){
-            float bilansP = StartActivity.dataList.get(i).getBilansP();
-            float bilansR = StartActivity.dataList.get(i).getBilansR();
+            float bilansP = StartActivity.dataList.get(i).getPerson1TransationBalance();
+            float bilansR = StartActivity.dataList.get(i).getPerson2TransationBalance();
 
             if(i<StartActivity.dataList.size()-1){
-                saldo = StartActivity.dataList.get(i+1).getSaldo() + bilansP-bilansR;
+                saldo = StartActivity.dataList.get(i+1).getBalance() + bilansP-bilansR;
             }else{
                 saldo =initialBallance + bilansP-bilansR;
             }
-            StartActivity.dataList.get(i).setSaldo(saldo);
+            StartActivity.dataList.get(i).setBalance(saldo);
         }
         StartActivity.totalBalance = saldo;
     }
@@ -255,14 +255,14 @@ public class HistoryActivity extends AppCompatActivity {
             for (int i=0; i< list.size(); i++){
                 JSONObject jsonRow = new JSONObject();
                 jsonRow.put(KEY_DATE, new DateHelper().dateToString(list.get(i).getDate()));
-                jsonRow.put(KEY_BILL, list.get(i).getTotal());
+                jsonRow.put(KEY_BILL, list.get(i).getBill());
                 jsonRow.put(KEY_PERSON1_PART, list.get(i).getPerson1Part());
                 jsonRow.put(KEY_PERSON2_PART, list.get(i).getPerson2Part());
-                jsonRow.put(KEY_WHO_PAYS, list.get(i).getPayment());
+                jsonRow.put(KEY_WHO_PAYS, list.get(i).getWhoPays());
                 jsonRow.put(KEY_DESCRIPTION, list.get(i).getDescription());
-                jsonRow.put(KEY_PERSON1_TRANSACTION_BALANCE, list.get(i).getBilansP());
-                jsonRow.put(KEY_PERSON2_TRANSACTION_BALANCE, list.get(i).getBilansR());
-                jsonRow.put(KEY_BALANCE, list.get(i).getSaldo());
+                jsonRow.put(KEY_PERSON1_TRANSACTION_BALANCE, list.get(i).getPerson1TransationBalance());
+                jsonRow.put(KEY_PERSON2_TRANSACTION_BALANCE, list.get(i).getPerson2TransationBalance());
+                jsonRow.put(KEY_BALANCE, list.get(i).getBalance());
                 jsonArray.put(jsonRow);
             }
             jsonObject.put(KEY_JSON_ARRAY, jsonArray);

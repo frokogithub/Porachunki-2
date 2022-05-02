@@ -180,7 +180,7 @@ public class QuicTransactionActivity extends AppCompatActivity {
         rd.setDate(date);
 
         float total = Float.valueOf(tvKwota.getText().toString());
-        rd.setTotal(total);
+        rd.setBill(total);
 
         float person2Part = 0;
         float person1Part = 0;
@@ -195,14 +195,14 @@ public class QuicTransactionActivity extends AppCompatActivity {
             whoPays = person2;
             person1Part = total;
         }
-        rd.setPayment(whoPays);
+        rd.setWhoPays(whoPays);
         rd.setPerson2Part(person2Part);
         rd.setPerson1Part(person1Part);
 
         rd.setDescription(tvDescription.getText().toString());
 
-        rd.setBilansP(calculator.bilans(total, person2Part, person1Part, whoPays)[0]);
-        rd.setBilansR(calculator.bilans(total, person2Part, person1Part, whoPays)[1]);
+        rd.setPerson1TransationBalance(calculator.bilans(total, person2Part, person1Part, whoPays)[0]);
+        rd.setPerson2TransationBalance(calculator.bilans(total, person2Part, person1Part, whoPays)[1]);
 
         // wymusza zapis danych na pierwszej pozycji
         dataList.add(0,rd);
@@ -238,15 +238,15 @@ public class QuicTransactionActivity extends AppCompatActivity {
         float saldo = initialBallance;
         RowData rd = new RowData();
         for(int i = dataList.size()-1; i>=0; i--){
-            float bilansP = dataList.get(i).getBilansP();
-            float bilansR = dataList.get(i).getBilansR();
+            float bilansP = dataList.get(i).getPerson1TransationBalance();
+            float bilansR = dataList.get(i).getPerson2TransationBalance();
 
             if(i<dataList.size()-1){
-                saldo = dataList.get(i+1).getSaldo() + bilansP-bilansR;
+                saldo = dataList.get(i+1).getBalance() + bilansP-bilansR;
             }else{
                 saldo =initialBallance + bilansP-bilansR;
             }
-            dataList.get(i).setSaldo(saldo);
+            dataList.get(i).setBalance(saldo);
         }
         StartActivity.totalBalance = saldo;
     }
@@ -280,14 +280,14 @@ public class QuicTransactionActivity extends AppCompatActivity {
             for (int i=0; i< dataList.size(); i++){
                 JSONObject jsonRow = new JSONObject();
                 jsonRow.put(KEY_DATE, new DateHelper().dateToString(dataList.get(i).getDate()));
-                jsonRow.put(KEY_BILL, dataList.get(i).getTotal());
+                jsonRow.put(KEY_BILL, dataList.get(i).getBill());
                 jsonRow.put(KEY_PERSON1_PART, dataList.get(i).getPerson1Part());
                 jsonRow.put(KEY_PERSON2_PART, dataList.get(i).getPerson2Part());
-                jsonRow.put(KEY_WHO_PAYS, dataList.get(i).getPayment());
+                jsonRow.put(KEY_WHO_PAYS, dataList.get(i).getWhoPays());
                 jsonRow.put(KEY_DESCRIPTION, dataList.get(i).getDescription());
-                jsonRow.put(KEY_PERSON1_TRANSACTION_BALANCE, dataList.get(i).getBilansP());
-                jsonRow.put(KEY_PERSON2_TRANSACTION_BALANCE, dataList.get(i).getBilansR());
-                jsonRow.put(KEY_BALANCE, dataList.get(i).getSaldo());
+                jsonRow.put(KEY_PERSON1_TRANSACTION_BALANCE, dataList.get(i).getPerson1TransationBalance());
+                jsonRow.put(KEY_PERSON2_TRANSACTION_BALANCE, dataList.get(i).getPerson2TransationBalance());
+                jsonRow.put(KEY_BALANCE, dataList.get(i).getBalance());
                 jsonArray.put(jsonRow);
             }
             jsonObject.put(KEY_JSON_ARRAY, jsonArray);

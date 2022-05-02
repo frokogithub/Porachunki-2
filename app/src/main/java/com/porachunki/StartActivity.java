@@ -116,7 +116,7 @@ public class StartActivity extends AppCompatActivity {
 
                 RowData rd = new RowData();
                 for(int i=0; i<jsonArray.length(); i++){
-                    rd.setTotal((float)jsonArray.getJSONObject(i).getDouble(KEY_BILL));
+                    rd.setBill((float)jsonArray.getJSONObject(i).getDouble(KEY_BILL));
                     try{
                         date = new SimpleDateFormat("dd.MM.yyyy").parse(jsonArray.getJSONObject(i).getString(KEY_DATE));
                         rd.setDate(date);
@@ -125,12 +125,12 @@ public class StartActivity extends AppCompatActivity {
                     }
                     rd.setPerson1Part((float)jsonArray.getJSONObject(i).getDouble(KEY_PERSON1_PART));
                     rd.setPerson2Part((float)jsonArray.getJSONObject(i).getDouble(KEY_PERSON2_PART));
-                    rd.setPayment(jsonArray.getJSONObject(i).getString(KEY_WHO_PAYS));
+                    rd.setWhoPays(jsonArray.getJSONObject(i).getString(KEY_WHO_PAYS));
                     rd.setDescription(jsonArray.getJSONObject(i).getString(KEY_DESCRIPTION));
-                    rd.setBilansP((float)jsonArray.getJSONObject(i).getDouble(KEY_PERSON1_TRANSACTION_BALANCE));
-                    rd.setBilansR((float)jsonArray.getJSONObject(i).getDouble(KEY_PERSON2_TRANSACTION_BALANCE));
+                    rd.setPerson1TransationBalance((float)jsonArray.getJSONObject(i).getDouble(KEY_PERSON1_TRANSACTION_BALANCE));
+                    rd.setPerson2TransationBalance((float)jsonArray.getJSONObject(i).getDouble(KEY_PERSON2_TRANSACTION_BALANCE));
                     float saldo = (float)jsonArray.getJSONObject(i).getDouble(KEY_BALANCE);
-                    rd.setSaldo(saldo);
+                    rd.setBalance(saldo);
 
                     // Nie wpisuje do tabeli rekordów starszych niż miesiąc
                     if (date.after(monthAgo)){
