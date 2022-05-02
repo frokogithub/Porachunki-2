@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -28,8 +27,8 @@ public class HistoryActivity extends AppCompatActivity {
 
     TextView tvDate;
     TextView tvTotal;
-    TextView tvRobertPart;
-    TextView tvPaulinaPart;
+    TextView tvPerson2Part;
+    TextView tvPerson1Part;
     TextView tvPayment;
     TextView tvBilans;
     TextView tvDescription;
@@ -72,8 +71,8 @@ public class HistoryActivity extends AppCompatActivity {
     private void setViews(){
         tvDate = findViewById(R.id.tv_details_date);
         tvTotal = findViewById(R.id.tv_details_total);
-        tvRobertPart = findViewById(R.id.tv_details_robert_part);
-        tvPaulinaPart = findViewById(R.id.tv_details_paulina_part);
+        tvPerson2Part = findViewById(R.id.tv_details_person_2_part);
+        tvPerson1Part = findViewById(R.id.tv_details_person_1_part);
         tvPayment = findViewById(R.id.tv_details_payment);
         tvBilans = findViewById(R.id.tv_details_bilans);
         tvDescription = findViewById(R.id.tv_details_description);
@@ -138,8 +137,8 @@ public class HistoryActivity extends AppCompatActivity {
         String pln = " zł";
         String date = new DateHelper().dateToString(rd.getDate());
         float total = rd.getTotal();
-        float robertPart = rd.getRobertPart();
-        float paulinaPart = rd.getPaulinaPart();
+        float robertPart = rd.getPerson2Part();
+        float paulinaPart = rd.getPerson1Part();
         String payment = rd.getPayment();
         float bilansP = rd.getBilansP();
         float bilansR = rd.getBilansR();
@@ -149,14 +148,14 @@ public class HistoryActivity extends AppCompatActivity {
         tvDate.setText(date);
         tvTotal.setText(String.format("%.02f",total)+pln);
         if(robertPart==0){
-            tvRobertPart.setText("-");
+            tvPerson2Part.setText("-");
         }else{
-            tvRobertPart.setText(String.format("%.02f",robertPart)+pln);
+            tvPerson2Part.setText(String.format("%.02f",robertPart)+pln);
         }
         if(paulinaPart==0){
-            tvPaulinaPart.setText("-");
+            tvPerson1Part.setText("-");
         }else{
-            tvPaulinaPart.setText(String.format("%.02f",paulinaPart)+pln);
+            tvPerson1Part.setText(String.format("%.02f",paulinaPart)+pln);
         }
         tvPayment.setText(payment);
 
@@ -189,8 +188,8 @@ public class HistoryActivity extends AppCompatActivity {
     private void clearDetails(){
         tvDate.setText("-");
         tvTotal.setText("-");
-        tvRobertPart.setText("-");
-        tvPaulinaPart.setText("-");
+        tvPerson2Part.setText("-");
+        tvPerson1Part.setText("-");
         tvPayment.setText("-");
         tvBilans.setText("-");
         tvDescription.setText("-");
@@ -259,8 +258,8 @@ public class HistoryActivity extends AppCompatActivity {
                 JSONObject jsonRow = new JSONObject();
                 jsonRow.put(KEY_DATE, new DateHelper().dateToString(list.get(i).getDate()));
                 jsonRow.put(KEY_TOTAL, list.get(i).getTotal());
-                jsonRow.put(KEY_PPART, list.get(i).getPaulinaPart());
-                jsonRow.put(KEY_RPART, list.get(i).getRobertPart());
+                jsonRow.put(KEY_PPART, list.get(i).getPerson1Part());
+                jsonRow.put(KEY_RPART, list.get(i).getPerson2Part());
                 jsonRow.put(KEY_PAYMENT, list.get(i).getPayment());
                 jsonRow.put(KEY_DESCRIPTION, list.get(i).getDescription());
                 jsonRow.put(KEY_PBILANS, list.get(i).getBilansP());

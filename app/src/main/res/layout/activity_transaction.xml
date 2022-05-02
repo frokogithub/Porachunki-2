@@ -20,28 +20,28 @@
         app:layout_constraintTop_toTopOf="@+id/tv_transaction_date" />
 
     <TextView
-        android:id="@+id/tv_Robert"
+        android:id="@+id/tv_person_2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:text="@string/tv_Robert"
+        android:text="@string/person_2_name"
         android:textColor="@color/saldo_label_text"
         android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/et_transaction_robert"
-        app:layout_constraintEnd_toStartOf="@+id/et_transaction_robert"
-        app:layout_constraintTop_toTopOf="@+id/et_transaction_robert" />
+        app:layout_constraintBottom_toBottomOf="@+id/et_transaction_person_2"
+        app:layout_constraintEnd_toStartOf="@+id/et_transaction_person_2"
+        app:layout_constraintTop_toTopOf="@+id/et_transaction_person_2" />
 
     <TextView
-        android:id="@+id/tv_Paulina"
+        android:id="@+id/tv_person_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:text="@string/tv_Paulina"
+        android:text="@string/person_1_name"
         android:textColor="@color/saldo_label_text"
         android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/et_transaction_paulina"
-        app:layout_constraintEnd_toStartOf="@+id/et_transaction_paulina"
-        app:layout_constraintTop_toTopOf="@+id/et_transaction_paulina" />
+        app:layout_constraintBottom_toBottomOf="@+id/et_transaction_person_1"
+        app:layout_constraintEnd_toStartOf="@+id/et_transaction_person_1"
+        app:layout_constraintTop_toTopOf="@+id/et_transaction_person_1" />
 
     <TextView
         android:id="@+id/tv_total"
@@ -76,7 +76,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/et_transaction_paulina"
+        android:id="@+id/et_transaction_person_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -93,7 +93,7 @@
         app:layout_constraintTop_toBottomOf="@+id/et_transaction_total" />
 
     <EditText
-        android:id="@+id/et_transaction_robert"
+        android:id="@+id/et_transaction_person_2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -106,8 +106,8 @@
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
         android:textSize="22sp"
-        app:layout_constraintEnd_toEndOf="@+id/et_transaction_paulina"
-        app:layout_constraintTop_toBottomOf="@+id/et_transaction_paulina" />
+        app:layout_constraintEnd_toEndOf="@+id/et_transaction_person_1"
+        app:layout_constraintTop_toBottomOf="@+id/et_transaction_person_1" />
 
     <TextView
         android:id="@+id/tv_transaction_date"
@@ -123,8 +123,8 @@
         android:paddingBottom="5dp"
         android:textColor="@android:color/black"
         android:textSize="22sp"
-        app:layout_constraintEnd_toEndOf="@+id/et_transaction_robert"
-        app:layout_constraintTop_toBottomOf="@+id/et_transaction_robert" />
+        app:layout_constraintEnd_toEndOf="@+id/et_transaction_person_2"
+        app:layout_constraintTop_toBottomOf="@+id/et_transaction_person_2" />
 
     <Button
         android:id="@+id/bt_ok_transaction"
@@ -162,34 +162,34 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_transaction_date">
 
         <RadioButton
-            android:id="@+id/rb_paulina_pays"
+            android:id="@+id/rb_person_1_pays"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:button="@android:drawable/btn_radio"
             android:layoutDirection="rtl"
             android:paddingStart="20dp"
-            android:text="@string/Paulina_pays"
+            android:text="@string/person_1_pays"
             android:textColor="@color/saldo_label_text"
             android:textSize="20sp"
-            app:layout_constraintBottom_toTopOf="@+id/rb_robert_pays"
+            app:layout_constraintBottom_toTopOf="@+id/rb_person_2_pays"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <RadioButton
-            android:id="@+id/rb_robert_pays"
+            android:id="@+id/rb_person_2_pays"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:button="@android:drawable/btn_radio"
             android:layoutDirection="rtl"
             android:paddingStart="36dp"
-            android:text="@string/Robert_pays"
+            android:text="@string/person_2_pays"
             android:textColor="@color/saldo_label_text"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/rb_paulina_pays" />
+            app:layout_constraintTop_toBottomOf="@+id/rb_person_1_pays" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <EditText

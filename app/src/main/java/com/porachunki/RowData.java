@@ -7,8 +7,8 @@ public class RowData {
     private boolean justAddedFlag = false;
     private Date date;
     private float total;
-    private float PaulinaPart;
-    private float RobertPart;
+    private float Person1Part;
+    private float Person2Part;
     private String payment;
     private String description;
     private float bilansR;
@@ -40,20 +40,20 @@ public class RowData {
         this.total = total;
     }
 
-    public float getRobertPart() {
-        return RobertPart;
+    public float getPerson2Part() {
+        return Person2Part;
     }
 
-    public void setRobertPart(float robertPart) {
-        RobertPart = robertPart;
+    public void setPerson2Part(float person2Part) {
+        Person2Part = person2Part;
     }
 
-    public float getPaulinaPart() {
-        return PaulinaPart;
+    public float getPerson1Part() {
+        return Person1Part;
     }
 
-    public void setPaulinaPart(float paulinaPart) {
-        PaulinaPart = paulinaPart;
+    public void setPerson1Part(float person1Part) {
+        Person1Part = person1Part;
     }
 
     public String getPayment() {

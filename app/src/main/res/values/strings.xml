@@ -3,8 +3,8 @@
 
     <string name="tv_saldo_label">Aktualny stan:</string>
     <string name="tv_total">Łącznie:</string>
-    <string name="tv_Paulina">Paulina:</string>
-    <string name="tv_Robert">Robert:</string>
+    <string name="person_1_name">Ewa:</string>
+    <string name="person_2_name">Adam:</string>
     <string name="tv_Date">Data:</string>
 
     <string name="btn_add_transaction">"Dodaj  Porachunki"</string>
@@ -14,10 +14,10 @@
     <string name="btn_cancel">Anuluj</string>
 
     <string name="kwota_label">Kwota:</string>
-    <string name="Robert_to_Paulina">"Robert  >>>  Paulina"</string>
-    <string name="Paulina_to_Robert">"Paulina  >>>  Robert"</string>
-    <string name="Robert_pays">płacił  Robert</string>
-    <string name="Paulina_pays">płaciła  Paulina</string>
+    <string name="person_2_to_person_1">"Adam  >>>  Ewa"</string>
+    <string name="person_1_to_person_2">"Ewa  >>>  Adam"</string>
+    <string name="person_2_pays">płacił  Adam</string>
+    <string name="person_1_pays">płaciła  Ewa</string>
 
     <string name="alert_warning">Czy na pewno usunąć wpis?</string>
 </resources>

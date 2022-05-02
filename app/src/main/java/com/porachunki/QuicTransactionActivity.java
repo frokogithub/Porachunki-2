@@ -11,7 +11,6 @@ import android.text.InputType;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -21,11 +20,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -36,8 +32,8 @@ public class QuicTransactionActivity extends AppCompatActivity {
 
     TextView tvDate;
     TextView tvKwota;
-    RadioButton rbPaulinaToRobert;
-    RadioButton rbRobertToPaulina;
+    RadioButton rbPerson1ToPerson2;
+    RadioButton rbPerson2ToPerson1;
     TextView tvDescription;
     DateHelper dateHelper;
     private int TVday;
@@ -93,8 +89,8 @@ public class QuicTransactionActivity extends AppCompatActivity {
         tvKwota = findViewById(R.id.et_quick_transaction_kwota);
         Button btnOK = findViewById(R.id.bt_ok_quick_transaction);
         Button btnCancel = findViewById(R.id.bt_cancel_quick_transaction);
-        rbPaulinaToRobert = findViewById(R.id.rb_paulina_to_robert);
-        rbRobertToPaulina = findViewById(R.id.rb_robert_to_paulina);
+        rbPerson1ToPerson2 = findViewById(R.id.rb_person_1_to_person_2);
+        rbPerson2ToPerson1 = findViewById(R.id.rb_person_2_to_person_1);
         tvDescription = findViewById(R.id.et_quick_transaction_description);
         tvDescription.setImeOptions(EditorInfo.IME_ACTION_DONE);
         tvDescription.setRawInputType(InputType.TYPE_CLASS_TEXT);
@@ -123,19 +119,19 @@ public class QuicTransactionActivity extends AppCompatActivity {
         });
 
 
-        rbPaulinaToRobert.setChecked(true);
-        rbPaulinaToRobert.setOnClickListener(new View.OnClickListener() {
+        rbPerson1ToPerson2.setChecked(true);
+        rbPerson1ToPerson2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                rbPaulinaToRobert.setChecked(true);
-                rbRobertToPaulina.setChecked(false);
+                rbPerson1ToPerson2.setChecked(true);
+                rbPerson2ToPerson1.setChecked(false);
             }
         });
-        rbRobertToPaulina.setOnClickListener(new View.OnClickListener() {
+        rbPerson2ToPerson1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                rbPaulinaToRobert.setChecked(false);
-                rbRobertToPaulina.setChecked(true);
+                rbPerson1ToPerson2.setChecked(false);
+                rbPerson2ToPerson1.setChecked(true);
             }
         });
 
@@ -185,25 +181,25 @@ public class QuicTransactionActivity extends AppCompatActivity {
         float total = Float.valueOf(tvKwota.getText().toString());
         rd.setTotal(total);
 
-        float robertPart = 0;
-        float paulinaPart = 0;
+        float person2Part = 0;
+        float person1Part = 0;
 
         String payment;
-        if(rbPaulinaToRobert.isChecked()){
+        if(rbPerson1ToPerson2.isChecked()){
             payment = "Paulina";
-            robertPart = total;
+            person2Part = total;
         }else{
             payment = "Robert";
-            paulinaPart = total;
+            person1Part = total;
         }
         rd.setPayment(payment);
-        rd.setRobertPart(robertPart);
-        rd.setPaulinaPart(paulinaPart);
+        rd.setPerson2Part(person2Part);
+        rd.setPerson1Part(person1Part);
 
         rd.setDescription(tvDescription.getText().toString());
 
-        rd.setBilansP(calculator.bilans(total, robertPart, paulinaPart, payment)[0]);
-        rd.setBilansR(calculator.bilans(total, robertPart, paulinaPart, payment)[1]);
+        rd.setBilansP(calculator.bilans(total, person2Part, person1Part, payment)[0]);
+        rd.setBilansR(calculator.bilans(total, person2Part, person1Part, payment)[1]);
 
         // wymusza zapis danych na pierwszej pozycji
         StartActivity.dataList.add(0,rd);
@@ -284,8 +280,8 @@ public class QuicTransactionActivity extends AppCompatActivity {
                 JSONObject jsonRow = new JSONObject();
                 jsonRow.put(KEY_DATE, new DateHelper().dateToString(list.get(i).getDate()));
                 jsonRow.put(KEY_TOTAL, list.get(i).getTotal());
-                jsonRow.put(KEY_PPART, list.get(i).getPaulinaPart());
-                jsonRow.put(KEY_RPART, list.get(i).getRobertPart());
+                jsonRow.put(KEY_PPART, list.get(i).getPerson1Part());
+                jsonRow.put(KEY_RPART, list.get(i).getPerson2Part());
                 jsonRow.put(KEY_PAYMENT, list.get(i).getPayment());
                 jsonRow.put(KEY_DESCRIPTION, list.get(i).getDescription());
                 jsonRow.put(KEY_PBILANS, list.get(i).getBilansP());

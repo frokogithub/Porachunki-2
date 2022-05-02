@@ -123,8 +123,8 @@ public class StartActivity extends AppCompatActivity {
                     }catch (ParseException e){
                         e.printStackTrace();
                     }
-                    rd.setPaulinaPart((float)jsonArray.getJSONObject(i).getDouble(KEY_PPART));
-                    rd.setRobertPart((float)jsonArray.getJSONObject(i).getDouble(KEY_RPART));
+                    rd.setPerson1Part((float)jsonArray.getJSONObject(i).getDouble(KEY_PPART));
+                    rd.setPerson2Part((float)jsonArray.getJSONObject(i).getDouble(KEY_RPART));
                     rd.setPayment(jsonArray.getJSONObject(i).getString(KEY_PAYMENT));
                     rd.setDescription(jsonArray.getJSONObject(i).getString(KEY_DESCRIPTION));
                     rd.setBilansP((float)jsonArray.getJSONObject(i).getDouble(KEY_PBILANS));

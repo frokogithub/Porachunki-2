@@ -31,12 +31,12 @@ public class TransactionActivity extends AppCompatActivity {
     ArrayList<RowData> dataList = StartActivity.dataList;
 
     TextView tvTotal;
-    TextView tvPaulina;
-    TextView tvRobert;
+    TextView tvPerson1;
+    TextView tvPerson2;
     TextView tvDate;
     TextView tvDescription;
-    RadioButton rbPaulinaPays;
-    RadioButton rbRobertPays;
+    RadioButton rbPerson1Pays;
+    RadioButton rbPerson2Pays;
 
     DateHelper dateHelper;
     private int TVday;
@@ -89,13 +89,13 @@ public class TransactionActivity extends AppCompatActivity {
 
     private void initControls(){
         tvTotal = findViewById(R.id.et_transaction_total);
-        tvPaulina = findViewById(R.id.et_transaction_paulina);
-        tvRobert = findViewById(R.id.et_transaction_robert);
+        tvPerson1 = findViewById(R.id.et_transaction_person_1);
+        tvPerson2 = findViewById(R.id.et_transaction_person_2);
         tvDate = findViewById(R.id.tv_transaction_date);
         Button btnOK = findViewById(R.id.bt_ok_transaction);
         Button btnCancel = findViewById(R.id.bt_cancel_transaction);
-        rbPaulinaPays = findViewById(R.id.rb_paulina_pays);
-        rbRobertPays = findViewById(R.id.rb_robert_pays);
+        rbPerson1Pays = findViewById(R.id.rb_person_1_pays);
+        rbPerson2Pays = findViewById(R.id.rb_person_2_pays);
         tvDescription = findViewById(R.id.et_transaction_description);
         tvDescription.setImeOptions(EditorInfo.IME_ACTION_DONE);
         tvDescription.setRawInputType(InputType.TYPE_CLASS_TEXT);
@@ -122,19 +122,19 @@ public class TransactionActivity extends AppCompatActivity {
             }
         });
 
-        rbPaulinaPays.setChecked(true);
-        rbPaulinaPays.setOnClickListener(new View.OnClickListener() {
+        rbPerson1Pays.setChecked(true);
+        rbPerson1Pays.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                rbPaulinaPays.setChecked(true);
-                rbRobertPays.setChecked(false);
+                rbPerson1Pays.setChecked(true);
+                rbPerson2Pays.setChecked(false);
             }
         });
-        rbRobertPays.setOnClickListener(new View.OnClickListener() {
+        rbPerson2Pays.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                rbPaulinaPays.setChecked(false);
-                rbRobertPays.setChecked(true);
+                rbPerson1Pays.setChecked(false);
+                rbPerson2Pays.setChecked(true);
             }
         });
 
@@ -176,26 +176,26 @@ public class TransactionActivity extends AppCompatActivity {
         float total = Float.valueOf(tvTotal.getText().toString());
         rd.setTotal(total);
 
-        String rPartString = tvRobert.getText().toString();
+        String rPartString = tvPerson2.getText().toString();
         float robertPart;
         if(rPartString.matches("")){
             robertPart = 0;
         }else {
             robertPart = Float.valueOf(rPartString);
         }
-        rd.setRobertPart(robertPart);
+        rd.setPerson2Part(robertPart);
 
-        String pPartString = tvPaulina.getText().toString();
+        String pPartString = tvPerson1.getText().toString();
         float paulinaPart;
         if(pPartString.matches("")){
             paulinaPart = 0;
         }else {
             paulinaPart = Float.valueOf(pPartString);
         }
-        rd.setPaulinaPart(paulinaPart);
+        rd.setPerson1Part(paulinaPart);
 
         String payment;
-        if(rbPaulinaPays.isChecked()){
+        if(rbPerson1Pays.isChecked()){
             payment = "Paulina";
         }else{
             payment = "Robert";
@@ -279,8 +279,8 @@ public class TransactionActivity extends AppCompatActivity {
                 JSONObject jsonRow = new JSONObject();
                 jsonRow.put(KEY_DATE, new DateHelper().dateToString(dataList.get(i).getDate()));
                 jsonRow.put(KEY_TOTAL, dataList.get(i).getTotal());
-                jsonRow.put(KEY_PPART, dataList.get(i).getPaulinaPart());
-                jsonRow.put(KEY_RPART, dataList.get(i).getRobertPart());
+                jsonRow.put(KEY_PPART, dataList.get(i).getPerson1Part());
+                jsonRow.put(KEY_RPART, dataList.get(i).getPerson2Part());
                 jsonRow.put(KEY_PAYMENT, dataList.get(i).getPayment());
                 jsonRow.put(KEY_DESCRIPTION, dataList.get(i).getDescription());
                 jsonRow.put(KEY_PBILANS, dataList.get(i).getBilansP());
