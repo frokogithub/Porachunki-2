@@ -22,7 +22,7 @@ import java.util.Date;
 public class StartActivity extends AppCompatActivity {
 
     // statyczne pola dostępne z innych klas
-    public static float totalBallance = 0;
+    public static float totalBalance = 0;
     public static ArrayList<RowData> dataList = new ArrayList<>();
 
 
@@ -86,15 +86,15 @@ public class StartActivity extends AppCompatActivity {
     private void setDataList(){
 
         final String KEY_DATE = "date";
-        final String KEY_TOTAL = "total";
-        final String KEY_PPART = "paulina_part";
-        final String KEY_RPART = "robert_part";
-        final String KEY_PAYMENT = "payment";
+        final String KEY_BILL = "bill";
+        final String KEY_PERSON1_PART = "person1_part";
+        final String KEY_PERSON2_PART = "person2_part";
+        final String KEY_WHO_PAYS = "who_pays";
         final String KEY_DESCRIPTION = "description";
-        final String KEY_PBILANS = "paulina_bilans";
-        final String KEY_RBILANS = "robert_bilans";
-        final String KEY_SALDO = "saldo";
-        final String KEY_ARRAY = "all data";
+        final String KEY_PERSON1_TRANSACTION_BALANCE = "person1_transaction_balance";
+        final String KEY_PERSON2_TRANSACTION_BALANCE = "person2_transaction_balance";
+        final String KEY_BALANCE = "balance";
+        final String KEY_JSON_ARRAY = "json_array";
 
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, -30); //30 dni temu
@@ -110,26 +110,26 @@ public class StartActivity extends AppCompatActivity {
         if(loadedJsnObject!=null){
 
             try {
-                JSONArray jsonArray = loadedJsnObject.getJSONArray(KEY_ARRAY);
+                JSONArray jsonArray = loadedJsnObject.getJSONArray(KEY_JSON_ARRAY);
 
 //                Log.d("kroko_JSONObject", loadedJsnObject.toString());
 
                 RowData rd = new RowData();
                 for(int i=0; i<jsonArray.length(); i++){
-                    rd.setTotal((float)jsonArray.getJSONObject(i).getDouble(KEY_TOTAL));
+                    rd.setTotal((float)jsonArray.getJSONObject(i).getDouble(KEY_BILL));
                     try{
                         date = new SimpleDateFormat("dd.MM.yyyy").parse(jsonArray.getJSONObject(i).getString(KEY_DATE));
                         rd.setDate(date);
                     }catch (ParseException e){
                         e.printStackTrace();
                     }
-                    rd.setPerson1Part((float)jsonArray.getJSONObject(i).getDouble(KEY_PPART));
-                    rd.setPerson2Part((float)jsonArray.getJSONObject(i).getDouble(KEY_RPART));
-                    rd.setPayment(jsonArray.getJSONObject(i).getString(KEY_PAYMENT));
+                    rd.setPerson1Part((float)jsonArray.getJSONObject(i).getDouble(KEY_PERSON1_PART));
+                    rd.setPerson2Part((float)jsonArray.getJSONObject(i).getDouble(KEY_PERSON2_PART));
+                    rd.setPayment(jsonArray.getJSONObject(i).getString(KEY_WHO_PAYS));
                     rd.setDescription(jsonArray.getJSONObject(i).getString(KEY_DESCRIPTION));
-                    rd.setBilansP((float)jsonArray.getJSONObject(i).getDouble(KEY_PBILANS));
-                    rd.setBilansR((float)jsonArray.getJSONObject(i).getDouble(KEY_RBILANS));
-                    float saldo = (float)jsonArray.getJSONObject(i).getDouble(KEY_SALDO);
+                    rd.setBilansP((float)jsonArray.getJSONObject(i).getDouble(KEY_PERSON1_TRANSACTION_BALANCE));
+                    rd.setBilansR((float)jsonArray.getJSONObject(i).getDouble(KEY_PERSON2_TRANSACTION_BALANCE));
+                    float saldo = (float)jsonArray.getJSONObject(i).getDouble(KEY_BALANCE);
                     rd.setSaldo(saldo);
 
                     // Nie wpisuje do tabeli rekordów starszych niż miesiąc
@@ -145,7 +145,7 @@ public class StartActivity extends AppCompatActivity {
                     }
 
                     if(i==0){
-                        totalBallance = (float)jsonArray.getJSONObject(i).getDouble(KEY_SALDO);
+                        totalBalance = (float)jsonArray.getJSONObject(i).getDouble(KEY_BALANCE);
 //                        totalBallance = saldo;
                     }
 
@@ -165,10 +165,10 @@ public class StartActivity extends AppCompatActivity {
         String totalballanceString;
         String pln = " zł";
 
-        if(totalBallance>0){
-            totalballanceString = "Paulina  -"+String.format("%.02f",totalBallance)+pln;
-        }else if(totalBallance<0){
-            totalballanceString = "Robert  -"+String.format("%.02f",-totalBallance)+pln;
+        if(totalBalance >0){
+            totalballanceString = "Paulina  -"+String.format("%.02f", totalBalance)+pln;
+        }else if(totalBalance <0){
+            totalballanceString = "Robert  -"+String.format("%.02f",-totalBalance)+pln;
         }else{
             totalballanceString = "Zobowiązania uregulowane";
         }

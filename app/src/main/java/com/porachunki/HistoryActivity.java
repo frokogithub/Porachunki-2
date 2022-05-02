@@ -20,7 +20,7 @@ public class HistoryActivity extends AppCompatActivity {
 
     private ListView lv;
     private CustomAdapter customAdapter;
-    public static boolean forceSelection = true;
+    //public static boolean forceSelection = true;
     public static int forceCheckedPosition = 0;
 
     public float finalSaldo;
@@ -33,8 +33,6 @@ public class HistoryActivity extends AppCompatActivity {
     TextView tvBilans;
     TextView tvDescription;
     TextView tvSaldo;
-
-
 
     // Starter Pattern
     public static void start(Context context, int justAddedPosition) {
@@ -107,7 +105,7 @@ public class HistoryActivity extends AppCompatActivity {
                 deleteDialog.setOnDeleteClickListener(new OnDeleteClickListener() {
                     @Override
                     public void onDeleteClick(int posiition) {
-                        // jeśli kasowany jest ostatni (najstarszy) rekord, zapisujemy jego saldo jako saldo początkowe
+                        // TODO: jeśli kasowany jest ostatni (najstarszy) rekord, zapisujemy jego saldo jako saldo początkowe??
                         int lastPosition = StartActivity.dataList.size() - 1;
                         if(posiition==lastPosition){
 //                            writeInitialBallance(StartActivity.dataList.get(posiition).getSaldo());
@@ -214,7 +212,7 @@ public class HistoryActivity extends AppCompatActivity {
             }
             StartActivity.dataList.get(i).setSaldo(saldo);
         }
-        StartActivity.totalBallance = saldo;
+        StartActivity.totalBalance = saldo;
     }
 
     private float readInitialBallance(){
@@ -237,15 +235,15 @@ public class HistoryActivity extends AppCompatActivity {
     private void makeJsonFile(){
 
         final String KEY_DATE = "date";
-        final String KEY_TOTAL = "total";
-        final String KEY_PPART = "paulina_part";
-        final String KEY_RPART = "robert_part";
-        final String KEY_PAYMENT = "payment";
+        final String KEY_BILL = "bill";
+        final String KEY_PERSON1_PART = "person1_part";
+        final String KEY_PERSON2_PART = "person2_part";
+        final String KEY_WHO_PAYS = "who_pays";
         final String KEY_DESCRIPTION = "description";
-        final String KEY_PBILANS = "paulina_bilans";
-        final String KEY_RBILANS = "robert_bilans";
-        final String KEY_SALDO = "saldo";
-        final String KEY_ARRAY = "all data";
+        final String KEY_PERSON1_TRANSACTION_BALANCE = "person1_transaction_balance";
+        final String KEY_PERSON2_TRANSACTION_BALANCE = "person2_transaction_balance";
+        final String KEY_BALANCE = "balance";
+        final String KEY_JSON_ARRAY = "json_array";
 
 //        boolean saveToTempFolder = filename.equals(TEMP_JSON_FILENAME);
         JSONObject jsonObject = new JSONObject();
@@ -257,17 +255,17 @@ public class HistoryActivity extends AppCompatActivity {
             for (int i=0; i< list.size(); i++){
                 JSONObject jsonRow = new JSONObject();
                 jsonRow.put(KEY_DATE, new DateHelper().dateToString(list.get(i).getDate()));
-                jsonRow.put(KEY_TOTAL, list.get(i).getTotal());
-                jsonRow.put(KEY_PPART, list.get(i).getPerson1Part());
-                jsonRow.put(KEY_RPART, list.get(i).getPerson2Part());
-                jsonRow.put(KEY_PAYMENT, list.get(i).getPayment());
+                jsonRow.put(KEY_BILL, list.get(i).getTotal());
+                jsonRow.put(KEY_PERSON1_PART, list.get(i).getPerson1Part());
+                jsonRow.put(KEY_PERSON2_PART, list.get(i).getPerson2Part());
+                jsonRow.put(KEY_WHO_PAYS, list.get(i).getPayment());
                 jsonRow.put(KEY_DESCRIPTION, list.get(i).getDescription());
-                jsonRow.put(KEY_PBILANS, list.get(i).getBilansP());
-                jsonRow.put(KEY_RBILANS, list.get(i).getBilansR());
-                jsonRow.put(KEY_SALDO, list.get(i).getSaldo());
+                jsonRow.put(KEY_PERSON1_TRANSACTION_BALANCE, list.get(i).getBilansP());
+                jsonRow.put(KEY_PERSON2_TRANSACTION_BALANCE, list.get(i).getBilansR());
+                jsonRow.put(KEY_BALANCE, list.get(i).getSaldo());
                 jsonArray.put(jsonRow);
             }
-            jsonObject.put(KEY_ARRAY, jsonArray);
+            jsonObject.put(KEY_JSON_ARRAY, jsonArray);
 
 
         }catch (org.json.JSONException e){

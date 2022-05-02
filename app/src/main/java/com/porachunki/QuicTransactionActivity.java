@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputType;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -41,6 +40,9 @@ public class QuicTransactionActivity extends AppCompatActivity {
     private int TVyear;
 
     private int addedRowIndex;
+
+
+    private ArrayList<RowData> dataList = StartActivity.dataList;
 
 
     // Starter Pattern
@@ -95,7 +97,6 @@ public class QuicTransactionActivity extends AppCompatActivity {
         tvDescription.setImeOptions(EditorInfo.IME_ACTION_DONE);
         tvDescription.setRawInputType(InputType.TYPE_CLASS_TEXT);
 
-
         tvDate.setText(dateHelper.getCurrentDateString());
 
         tvDate.setOnClickListener(new View.OnClickListener() {
@@ -147,7 +148,7 @@ public class QuicTransactionActivity extends AppCompatActivity {
                     // Tworzy plik JSON
                     // Informuje następną aktywność o pozycji stworzonego wpisu (potrzebne do zaznaczenia go i wyświetlenia szczegółów transakcji)
                     updateDataList();
-                    sortDatalist(StartActivity.dataList);
+                    sortDatalist(dataList);
                     salda(readInitialBallance());
                     makeJsonFile();
                     addedRowIndex = findAddedRowIndex();
@@ -172,7 +173,7 @@ public class QuicTransactionActivity extends AppCompatActivity {
         RowData rd = new RowData();
         Date date = new Date();
         date = new DateHelper().IntToDate(TVday, TVmonth, TVyear);
-        Calculator calculator = new Calculator();
+        Calculator calculator = new Calculator(getApplicationContext());
 
         // flaguje wpis żeby odnależć go po sortowaniu
         rd.setJustAddedFlag(true);
@@ -184,25 +185,27 @@ public class QuicTransactionActivity extends AppCompatActivity {
         float person2Part = 0;
         float person1Part = 0;
 
-        String payment;
+        String whoPays;
+        String person1 = getString(R.string.person_1_name);
+        String person2 = getString(R.string.person_2_name);
         if(rbPerson1ToPerson2.isChecked()){
-            payment = "Paulina";
+            whoPays = person1;
             person2Part = total;
         }else{
-            payment = "Robert";
+            whoPays = person2;
             person1Part = total;
         }
-        rd.setPayment(payment);
+        rd.setPayment(whoPays);
         rd.setPerson2Part(person2Part);
         rd.setPerson1Part(person1Part);
 
         rd.setDescription(tvDescription.getText().toString());
 
-        rd.setBilansP(calculator.bilans(total, person2Part, person1Part, payment)[0]);
-        rd.setBilansR(calculator.bilans(total, person2Part, person1Part, payment)[1]);
+        rd.setBilansP(calculator.bilans(total, person2Part, person1Part, whoPays)[0]);
+        rd.setBilansR(calculator.bilans(total, person2Part, person1Part, whoPays)[1]);
 
         // wymusza zapis danych na pierwszej pozycji
-        StartActivity.dataList.add(0,rd);
+        dataList.add(0,rd);
     }
 
     /* Sortuje tabelę od najmłodszego do najstarszego rekordu*/
@@ -217,9 +220,9 @@ public class QuicTransactionActivity extends AppCompatActivity {
 
     /* Znajduje pozycję oflagowanego wcześniej rekordu */
     private int findAddedRowIndex(){
-        for (int i=0;i<StartActivity.dataList.size(); i++){
-            if(StartActivity.dataList.get(i).isJustAddedFlag()){
-                StartActivity.dataList.get(i).setJustAddedFlag(false);
+        for (int i=0;i<dataList.size(); i++){
+            if(dataList.get(i).isJustAddedFlag()){
+                dataList.get(i).setJustAddedFlag(false);
                 return i;
             }
         }
@@ -231,21 +234,21 @@ public class QuicTransactionActivity extends AppCompatActivity {
     // Ostatnie (i=0) saldo częściowe jest saldem całkowitym.
     */
     private void salda(float initialBallance){
-        Log.d("kroko initialBallance", String.valueOf(initialBallance));
+        //Log.d("kroko initialBallance", String.valueOf(initialBallance));
         float saldo = initialBallance;
         RowData rd = new RowData();
-        for(int i = StartActivity.dataList.size()-1; i>=0; i--){
-            float bilansP = StartActivity.dataList.get(i).getBilansP();
-            float bilansR = StartActivity.dataList.get(i).getBilansR();
+        for(int i = dataList.size()-1; i>=0; i--){
+            float bilansP = dataList.get(i).getBilansP();
+            float bilansR = dataList.get(i).getBilansR();
 
-            if(i<StartActivity.dataList.size()-1){
-                saldo = StartActivity.dataList.get(i+1).getSaldo() + bilansP-bilansR;
+            if(i<dataList.size()-1){
+                saldo = dataList.get(i+1).getSaldo() + bilansP-bilansR;
             }else{
                 saldo =initialBallance + bilansP-bilansR;
             }
-            StartActivity.dataList.get(i).setSaldo(saldo);
+            dataList.get(i).setSaldo(saldo);
         }
-        StartActivity.totalBallance = saldo;
+        StartActivity.totalBalance = saldo;
     }
 
     private float readInitialBallance(){
@@ -259,37 +262,35 @@ public class QuicTransactionActivity extends AppCompatActivity {
     private void makeJsonFile(){
 
         final String KEY_DATE = "date";
-        final String KEY_TOTAL = "total";
-        final String KEY_PPART = "paulina_part";
-        final String KEY_RPART = "robert_part";
-        final String KEY_PAYMENT = "payment";
+        final String KEY_BILL = "bill";
+        final String KEY_PERSON1_PART = "person1_part";
+        final String KEY_PERSON2_PART = "person2_part";
+        final String KEY_WHO_PAYS = "who_pays";
         final String KEY_DESCRIPTION = "description";
-        final String KEY_PBILANS = "paulina_bilans";
-        final String KEY_RBILANS = "robert_bilans";
-        final String KEY_SALDO = "saldo";
-        final String KEY_ARRAY = "all data";
+        final String KEY_PERSON1_TRANSACTION_BALANCE = "person1_transaction_balance";
+        final String KEY_PERSON2_TRANSACTION_BALANCE = "person2_transaction_balance";
+        final String KEY_BALANCE = "balance";
+        final String KEY_JSON_ARRAY = "json_array";
 
-//        boolean saveToTempFolder = filename.equals(TEMP_JSON_FILENAME);
         JSONObject jsonObject = new JSONObject();
         JSONArray jsonArray = new JSONArray();
 
-        ArrayList<RowData> list = StartActivity.dataList;
         try {
 
-            for (int i=0; i< list.size(); i++){
+            for (int i=0; i< dataList.size(); i++){
                 JSONObject jsonRow = new JSONObject();
-                jsonRow.put(KEY_DATE, new DateHelper().dateToString(list.get(i).getDate()));
-                jsonRow.put(KEY_TOTAL, list.get(i).getTotal());
-                jsonRow.put(KEY_PPART, list.get(i).getPerson1Part());
-                jsonRow.put(KEY_RPART, list.get(i).getPerson2Part());
-                jsonRow.put(KEY_PAYMENT, list.get(i).getPayment());
-                jsonRow.put(KEY_DESCRIPTION, list.get(i).getDescription());
-                jsonRow.put(KEY_PBILANS, list.get(i).getBilansP());
-                jsonRow.put(KEY_RBILANS, list.get(i).getBilansR());
-                jsonRow.put(KEY_SALDO, list.get(i).getSaldo());
+                jsonRow.put(KEY_DATE, new DateHelper().dateToString(dataList.get(i).getDate()));
+                jsonRow.put(KEY_BILL, dataList.get(i).getTotal());
+                jsonRow.put(KEY_PERSON1_PART, dataList.get(i).getPerson1Part());
+                jsonRow.put(KEY_PERSON2_PART, dataList.get(i).getPerson2Part());
+                jsonRow.put(KEY_WHO_PAYS, dataList.get(i).getPayment());
+                jsonRow.put(KEY_DESCRIPTION, dataList.get(i).getDescription());
+                jsonRow.put(KEY_PERSON1_TRANSACTION_BALANCE, dataList.get(i).getBilansP());
+                jsonRow.put(KEY_PERSON2_TRANSACTION_BALANCE, dataList.get(i).getBilansR());
+                jsonRow.put(KEY_BALANCE, dataList.get(i).getSaldo());
                 jsonArray.put(jsonRow);
             }
-            jsonObject.put(KEY_ARRAY, jsonArray);
+            jsonObject.put(KEY_JSON_ARRAY, jsonArray);
 
 
         }catch (org.json.JSONException e){

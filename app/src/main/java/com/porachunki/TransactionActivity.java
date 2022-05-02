@@ -45,6 +45,8 @@ public class TransactionActivity extends AppCompatActivity {
 
     private int addedRowIndex;
 
+
+
     // Starter Pattern
     public static void start(Context context) {
         Intent starter = new Intent(context, TransactionActivity.class);
@@ -168,7 +170,7 @@ public class TransactionActivity extends AppCompatActivity {
         RowData rd = new RowData();
         Date date = new Date();
         date = new DateHelper().IntToDate(TVday, TVmonth, TVyear);
-        Calculator calculator = new Calculator();
+        Calculator calculator = new Calculator(getApplicationContext());
 
         rd.setJustAddedFlag(true);
         rd.setDate(date);
@@ -177,35 +179,37 @@ public class TransactionActivity extends AppCompatActivity {
         rd.setTotal(total);
 
         String rPartString = tvPerson2.getText().toString();
-        float robertPart;
+        float person2Part;
         if(rPartString.matches("")){
-            robertPart = 0;
+            person2Part = 0;
         }else {
-            robertPart = Float.valueOf(rPartString);
+            person2Part = Float.valueOf(rPartString);
         }
-        rd.setPerson2Part(robertPart);
+        rd.setPerson2Part(person2Part);
 
         String pPartString = tvPerson1.getText().toString();
-        float paulinaPart;
+        float person1Part;
         if(pPartString.matches("")){
-            paulinaPart = 0;
+            person1Part = 0;
         }else {
-            paulinaPart = Float.valueOf(pPartString);
+            person1Part = Float.valueOf(pPartString);
         }
-        rd.setPerson1Part(paulinaPart);
+        rd.setPerson1Part(person1Part);
 
-        String payment;
+        String whoPays;
+        String person1 = getString(R.string.person_1_name);
+        String person2 = getString(R.string.person_2_name);
         if(rbPerson1Pays.isChecked()){
-            payment = "Paulina";
+            whoPays = person1;
         }else{
-            payment = "Robert";
+            whoPays = person2;
         }
-        rd.setPayment(payment);
+        rd.setPayment(whoPays);
 
         rd.setDescription(tvDescription.getText().toString());
 
-        rd.setBilansP(calculator.bilans(total, robertPart, paulinaPart, payment)[0]);
-        rd.setBilansR(calculator.bilans(total, robertPart, paulinaPart, payment)[1]);
+        rd.setBilansP(calculator.bilans(total, person2Part, person1Part, whoPays)[0]);
+        rd.setBilansR(calculator.bilans(total, person2Part, person1Part, whoPays)[1]);
 
         dataList.add(0,rd);
     }
@@ -247,7 +251,7 @@ public class TransactionActivity extends AppCompatActivity {
             }
             dataList.get(i).setSaldo(saldo);
         }
-        StartActivity.totalBallance = saldo;
+        StartActivity.totalBalance = saldo;
     }
 
     private float readInitialBallance(){
@@ -260,35 +264,36 @@ public class TransactionActivity extends AppCompatActivity {
     private void makeJsonFile(){
 
         final String KEY_DATE = "date";
-        final String KEY_TOTAL = "total";
-        final String KEY_PPART = "paulina_part";
-        final String KEY_RPART = "robert_part";
-        final String KEY_PAYMENT = "payment";
+        final String KEY_BILL = "bill";
+        final String KEY_PERSON1_PART = "person1_part";
+        final String KEY_PERSON2_PART = "person2_part";
+        final String KEY_WHO_PAYS = "who_pays";
         final String KEY_DESCRIPTION = "description";
-        final String KEY_PBILANS = "paulina_bilans";
-        final String KEY_RBILANS = "robert_bilans";
-        final String KEY_SALDO = "saldo";
-        final String KEY_ARRAY = "all data";
+        final String KEY_PERSON1_TRANSACTION_BALANCE = "person1_transaction_balance";
+        final String KEY_PERSON2_TRANSACTION_BALANCE = "person2_transaction_balance";
+        final String KEY_BALANCE = "balance";
+        final String KEY_JSON_ARRAY = "json_array";
 
 
         JSONObject jsonObject = new JSONObject();
         JSONArray jsonArray = new JSONArray();
 
         try {
+
             for (int i = 0; i< dataList.size(); i++){
                 JSONObject jsonRow = new JSONObject();
                 jsonRow.put(KEY_DATE, new DateHelper().dateToString(dataList.get(i).getDate()));
-                jsonRow.put(KEY_TOTAL, dataList.get(i).getTotal());
-                jsonRow.put(KEY_PPART, dataList.get(i).getPerson1Part());
-                jsonRow.put(KEY_RPART, dataList.get(i).getPerson2Part());
-                jsonRow.put(KEY_PAYMENT, dataList.get(i).getPayment());
+                jsonRow.put(KEY_BILL, dataList.get(i).getTotal());
+                jsonRow.put(KEY_PERSON1_PART, dataList.get(i).getPerson1Part());
+                jsonRow.put(KEY_PERSON2_PART, dataList.get(i).getPerson2Part());
+                jsonRow.put(KEY_WHO_PAYS, dataList.get(i).getPayment());
                 jsonRow.put(KEY_DESCRIPTION, dataList.get(i).getDescription());
-                jsonRow.put(KEY_PBILANS, dataList.get(i).getBilansP());
-                jsonRow.put(KEY_RBILANS, dataList.get(i).getBilansR());
-                jsonRow.put(KEY_SALDO, dataList.get(i).getSaldo());
+                jsonRow.put(KEY_PERSON1_TRANSACTION_BALANCE, dataList.get(i).getBilansP());
+                jsonRow.put(KEY_PERSON2_TRANSACTION_BALANCE, dataList.get(i).getBilansR());
+                jsonRow.put(KEY_BALANCE, dataList.get(i).getSaldo());
                 jsonArray.put(jsonRow);
             }
-            jsonObject.put(KEY_ARRAY, jsonArray);
+            jsonObject.put(KEY_JSON_ARRAY, jsonArray);
 
 
         }catch (org.json.JSONException e){
