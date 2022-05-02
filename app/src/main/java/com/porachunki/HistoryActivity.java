@@ -111,7 +111,7 @@ public class HistoryActivity extends AppCompatActivity {
                         // jeśli kasowany jest ostatni (najstarszy) rekord, zapisujemy jego saldo jako saldo początkowe
                         int lastPosition = StartActivity.dataList.size() - 1;
                         if(posiition==lastPosition){
-                            writeInitialBallance(StartActivity.dataList.get(posiition).getSaldo());
+//                            writeInitialBallance(StartActivity.dataList.get(posiition).getSaldo());
                         }
                         StartActivity.dataList.remove(posiition);
                         salda(readInitialBallance());

@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputType;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -28,6 +27,8 @@ import java.util.Comparator;
 import java.util.Date;
 
 public class TransactionActivity extends AppCompatActivity {
+
+    ArrayList<RowData> dataList = StartActivity.dataList;
 
     TextView tvTotal;
     TextView tvPaulina;
@@ -144,7 +145,7 @@ public class TransactionActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),"Wypełnij pole Łącznie:", Toast.LENGTH_SHORT).show();
                 }else{
                     updateDataList();
-                    sortDatalist(StartActivity.dataList);
+                    sortDatalist(dataList);
                     salda(readInitialBallance());
                     makeJsonFile();
                     addedRowIndex = findAddedRowIndex();
@@ -206,7 +207,7 @@ public class TransactionActivity extends AppCompatActivity {
         rd.setBilansP(calculator.bilans(total, robertPart, paulinaPart, payment)[0]);
         rd.setBilansR(calculator.bilans(total, robertPart, paulinaPart, payment)[1]);
 
-        StartActivity.dataList.add(0,rd);
+        dataList.add(0,rd);
     }
 
     private void sortDatalist(ArrayList list){
@@ -216,16 +217,12 @@ public class TransactionActivity extends AppCompatActivity {
                 return rm2.getDate().compareTo(rm1.getDate());
             }
         });
-//        for(int i = 0; i < 10; i++){
-//            RowData rm = (RowData)list.get(i);
-//            Log.d("kroko_sort", rm.getDate()+" - "+rm.getTotal());
-//        }
     }
 
     private int findAddedRowIndex(){
-        for (int i=0;i<StartActivity.dataList.size(); i++){
-            if(StartActivity.dataList.get(i).isJustAddedFlag()){
-                StartActivity.dataList.get(i).setJustAddedFlag(false);
+        for (int i = 0; i< dataList.size(); i++){
+            if(dataList.get(i).isJustAddedFlag()){
+                dataList.get(i).setJustAddedFlag(false);
                 return i;
             }
         }
@@ -239,16 +236,16 @@ public class TransactionActivity extends AppCompatActivity {
     private void salda(float initialBallance){
         float saldo = initialBallance;
         RowData rd = new RowData();
-        for(int i = StartActivity.dataList.size()-1; i>=0; i--){
-            float bilansP = StartActivity.dataList.get(i).getBilansP();
-            float bilansR = StartActivity.dataList.get(i).getBilansR();
+        for(int i = dataList.size()-1; i>=0; i--){
+            float bilansP = dataList.get(i).getBilansP();
+            float bilansR = dataList.get(i).getBilansR();
 
-            if(i<StartActivity.dataList.size()-1){
-                saldo = StartActivity.dataList.get(i+1).getSaldo() + bilansP-bilansR;
+            if(i< dataList.size()-1){
+                saldo = dataList.get(i+1).getSaldo() + bilansP-bilansR;
             }else{
                 saldo =initialBallance + bilansP-bilansR;
             }
-            StartActivity.dataList.get(i).setSaldo(saldo);
+            dataList.get(i).setSaldo(saldo);
         }
         StartActivity.totalBallance = saldo;
     }
@@ -277,20 +274,18 @@ public class TransactionActivity extends AppCompatActivity {
         JSONObject jsonObject = new JSONObject();
         JSONArray jsonArray = new JSONArray();
 
-        ArrayList<RowData> list = StartActivity.dataList;
         try {
-
-            for (int i=0; i< list.size(); i++){
+            for (int i = 0; i< dataList.size(); i++){
                 JSONObject jsonRow = new JSONObject();
-                jsonRow.put(KEY_DATE, new DateHelper().dateToString(list.get(i).getDate()));
-                jsonRow.put(KEY_TOTAL, list.get(i).getTotal());
-                jsonRow.put(KEY_PPART, list.get(i).getPaulinaPart());
-                jsonRow.put(KEY_RPART, list.get(i).getRobertPart());
-                jsonRow.put(KEY_PAYMENT, list.get(i).getPayment());
-                jsonRow.put(KEY_DESCRIPTION, list.get(i).getDescription());
-                jsonRow.put(KEY_PBILANS, list.get(i).getBilansP());
-                jsonRow.put(KEY_RBILANS, list.get(i).getBilansR());
-                jsonRow.put(KEY_SALDO, list.get(i).getSaldo());
+                jsonRow.put(KEY_DATE, new DateHelper().dateToString(dataList.get(i).getDate()));
+                jsonRow.put(KEY_TOTAL, dataList.get(i).getTotal());
+                jsonRow.put(KEY_PPART, dataList.get(i).getPaulinaPart());
+                jsonRow.put(KEY_RPART, dataList.get(i).getRobertPart());
+                jsonRow.put(KEY_PAYMENT, dataList.get(i).getPayment());
+                jsonRow.put(KEY_DESCRIPTION, dataList.get(i).getDescription());
+                jsonRow.put(KEY_PBILANS, dataList.get(i).getBilansP());
+                jsonRow.put(KEY_RBILANS, dataList.get(i).getBilansR());
+                jsonRow.put(KEY_SALDO, dataList.get(i).getSaldo());
                 jsonArray.put(jsonRow);
             }
             jsonObject.put(KEY_ARRAY, jsonArray);

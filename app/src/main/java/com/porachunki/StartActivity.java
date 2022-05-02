@@ -103,7 +103,7 @@ public class StartActivity extends AppCompatActivity {
 
         boolean isInitialBallanceUpdated = false;
 
-//        dataList.clear(); //todo: czy potrzebne?
+        dataList.clear(); //todo: czy potrzebne?
         JsonFileUtility jsonFileUtility = new JsonFileUtility(getApplicationContext());
         JSONObject loadedJsnObject = jsonFileUtility.loadJson();
 
@@ -114,9 +114,8 @@ public class StartActivity extends AppCompatActivity {
 
 //                Log.d("kroko_JSONObject", loadedJsnObject.toString());
 
+                RowData rd = new RowData();
                 for(int i=0; i<jsonArray.length(); i++){
-                    RowData rd = new RowData();
-
                     rd.setTotal((float)jsonArray.getJSONObject(i).getDouble(KEY_TOTAL));
                     try{
                         date = new SimpleDateFormat("dd.MM.yyyy").parse(jsonArray.getJSONObject(i).getString(KEY_DATE));
@@ -133,8 +132,6 @@ public class StartActivity extends AppCompatActivity {
                     float saldo = (float)jsonArray.getJSONObject(i).getDouble(KEY_SALDO);
                     rd.setSaldo(saldo);
 
-//                    Log.d("kroko", monthAgo.toString()+"  miesiąc temu");
-//                    Log.d("kroko", date.toString()+"  data");
                     // Nie wpisuje do tabeli rekordów starszych niż miesiąc
                     if (date.after(monthAgo)){
 //                        Log.d("kroko", date.toString()+"  w if");
