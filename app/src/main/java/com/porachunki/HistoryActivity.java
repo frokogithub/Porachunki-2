@@ -34,6 +34,8 @@ public class HistoryActivity extends AppCompatActivity {
     TextView tvDescription;
     TextView tvSaldo;
 
+    private ArrayList<RowData> dataList = StartActivity.dataList;
+
     // Starter Pattern
     public static void start(Context context, int justAddedPosition) {
         Intent starter = new Intent(context, HistoryActivity.class);
@@ -62,7 +64,7 @@ public class HistoryActivity extends AppCompatActivity {
         forceCheckedPosition = intent.getIntExtra("justAddedPosition", -1);
 
         setViews();
-        if (!StartActivity.dataList.isEmpty()) fillDetails(forceCheckedPosition);
+        if (!dataList.isEmpty()) fillDetails(forceCheckedPosition);
 
     }
 
@@ -78,8 +80,8 @@ public class HistoryActivity extends AppCompatActivity {
 
         lv = (ListView) findViewById(R.id.listView);
 
-        customAdapter = new CustomAdapter(this, StartActivity.dataList);
-        if (!StartActivity.dataList.isEmpty()) lv.setAdapter(customAdapter);
+        customAdapter = new CustomAdapter(this, dataList);
+        if (!dataList.isEmpty()) lv.setAdapter(customAdapter);
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -106,15 +108,15 @@ public class HistoryActivity extends AppCompatActivity {
                     @Override
                     public void onDeleteClick(int posiition) {
                         // TODO: jeśli kasowany jest ostatni (najstarszy) rekord, zapisujemy jego saldo jako saldo początkowe??
-                        int lastPosition = StartActivity.dataList.size() - 1;
+                        int lastPosition = dataList.size() - 1;
                         if(posiition==lastPosition){
-//                            writeInitialBallance(StartActivity.dataList.get(posiition).getSaldo());
+//                            writeInitialBallance(dataList.get(posiition).getSaldo());
                         }
-                        StartActivity.dataList.remove(posiition);
-                        salda(readInitialBallance());
+                        dataList.remove(posiition);
+                        balance(readInitialBallance());
                         makeJsonFile();
                         forceCheckedPosition = 0;
-                        if (!StartActivity.dataList.isEmpty()){
+                        if (!dataList.isEmpty()){
                             fillDetails(forceCheckedPosition);
                         }else{
                             clearDetails();
@@ -130,53 +132,56 @@ public class HistoryActivity extends AppCompatActivity {
     }
 
     private void fillDetails (int position){
-        RowData rd = StartActivity.dataList.get(position);
+        RowData rd = dataList.get(position);
 
         String pln = " zł";
         String date = new DateHelper().dateToString(rd.getDate());
-        float total = rd.getBill();
-        float robertPart = rd.getPerson2Part();
-        float paulinaPart = rd.getPerson1Part();
-        String payment = rd.getWhoPays();
-        float bilansP = rd.getPerson1TransationBalance();
-        float bilansR = rd.getPerson2TransationBalance();
+        float bill = rd.getBill();
+        float person2Part = rd.getPerson2Part();
+        float person1Part = rd.getPerson1Part();
+        String whoPays = rd.getWhoPays();
+        float person1TransationBalance = rd.getPerson1TransationBalance();
+        float person2TransationBalance = rd.getPerson2TransationBalance();
         String description = rd.getDescription();
+
+        String person1 = getString(R.string.person_1_name);
+        String person2 = getString(R.string.person_2_name);
         //int saldo ;
 
         tvDate.setText(date);
-        tvTotal.setText(String.format("%.02f",total)+pln);
-        if(robertPart==0){
+        tvTotal.setText(String.format("%.02f",bill)+pln);
+        if(person2Part==0){
             tvPerson2Part.setText("-");
         }else{
-            tvPerson2Part.setText(String.format("%.02f",robertPart)+pln);
+            tvPerson2Part.setText(String.format("%.02f",person2Part)+pln);
         }
-        if(paulinaPart==0){
+        if(person1Part==0){
             tvPerson1Part.setText("-");
         }else{
-            tvPerson1Part.setText(String.format("%.02f",paulinaPart)+pln);
+            tvPerson1Part.setText(String.format("%.02f",person1Part)+pln);
         }
-        tvPayment.setText(payment);
+        tvPayment.setText(whoPays);
 
         String bilans = null;
 
-        if(bilansP==0){
-            bilans = "Robert:   - "+String.format("%.02f",bilansR)+pln;
+        if(person1TransationBalance==0){
+            bilans = person2+":   - "+String.format("%.02f",person2TransationBalance)+pln;
         }
 
-        if(bilansR==0){
-            bilans = "Paulina: - "+String.format("%.02f",bilansP)+pln;
+        if(person2TransationBalance==0){
+            bilans = person1+":   - "+String.format("%.02f",person1TransationBalance)+pln;
         }
 
 
         tvBilans.setText(bilans);
         tvDescription.setText(description);
 
-        float saldo = StartActivity.dataList.get(position).getBalance();
+        float saldo = dataList.get(position).getBalance();
         String saldoString;
         if(saldo>0){
-            saldoString = "Saldo:    Paulina  -"+String.format("%.02f",saldo)+pln;//String.valueOf(saldo)+pln;
+            saldoString = "Saldo:    "+person1+"  -"+String.format("%.02f",saldo)+pln;//String.valueOf(saldo)+pln;
         }else if(saldo<0){
-            saldoString = "Saldo:    Robert  -"+String.format("%.02f",-saldo)+pln;
+            saldoString = "Saldo:    "+person2+"  -"+String.format("%.02f",-saldo)+pln;
         }else{
             saldoString = "Zobowiązania uregulowane";
         }
@@ -184,35 +189,36 @@ public class HistoryActivity extends AppCompatActivity {
     }
 
     private void clearDetails(){
-        tvDate.setText("-");
-        tvTotal.setText("-");
-        tvPerson2Part.setText("-");
-        tvPerson1Part.setText("-");
-        tvPayment.setText("-");
-        tvBilans.setText("-");
-        tvDescription.setText("-");
-        tvSaldo.setText("-");
+        String blank = "-";
+        tvDate.setText(blank);
+        tvTotal.setText(blank);
+        tvPerson2Part.setText(blank);
+        tvPerson1Part.setText(blank);
+        tvPayment.setText(blank);
+        tvBilans.setText(blank);
+        tvDescription.setText(blank);
+        tvSaldo.setText(blank);
     }
 
     /* Oblicza saldo częściowe dla każdego rekordu
      // licząc salda początkowego (Wcześniej konieczne sortowanie tabeli)
      // Ostatnie (i=0) saldo częściowe jest saldem całkowitym.
      */
-    private void salda(float initialBallance){
-        float saldo = initialBallance;
+    private void balance(float initialBallance){
+        float ballance = initialBallance;
         RowData rd = new RowData();
-        for(int i = StartActivity.dataList.size()-1; i>=0; i--){
-            float bilansP = StartActivity.dataList.get(i).getPerson1TransationBalance();
-            float bilansR = StartActivity.dataList.get(i).getPerson2TransationBalance();
+        for(int i = dataList.size()-1; i>=0; i--){
+            float person1TransationBalance = dataList.get(i).getPerson1TransationBalance();
+            float person2TransationBalance = dataList.get(i).getPerson2TransationBalance();
 
-            if(i<StartActivity.dataList.size()-1){
-                saldo = StartActivity.dataList.get(i+1).getBalance() + bilansP-bilansR;
+            if(i<dataList.size()-1){
+                ballance = dataList.get(i+1).getBalance() + person1TransationBalance-person2TransationBalance;
             }else{
-                saldo =initialBallance + bilansP-bilansR;
+                ballance =initialBallance + person1TransationBalance-person2TransationBalance;
             }
-            StartActivity.dataList.get(i).setBalance(saldo);
+            dataList.get(i).setBalance(ballance);
         }
-        StartActivity.totalBalance = saldo;
+        StartActivity.totalBalance = ballance;
     }
 
     private float readInitialBallance(){
@@ -249,7 +255,7 @@ public class HistoryActivity extends AppCompatActivity {
         JSONObject jsonObject = new JSONObject();
         JSONArray jsonArray = new JSONArray();
 
-        ArrayList<RowData> list = StartActivity.dataList;
+        ArrayList<RowData> list = dataList;
         try {
 
             for (int i=0; i< list.size(); i++){

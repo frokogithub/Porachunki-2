@@ -74,8 +74,8 @@ public class CustomAdapter extends BaseAdapter {
 
         DateHelper dh = new DateHelper();
         holder.tvRowDate.setText(dh.dateToCharString(rowDataArrayList.get(position).getDate()));
-        String total = String.format("%.02f",rowDataArrayList.get(position).getBill())+" zł";
-        holder.tvRowTotal.setText(total);
+        String bill = String.format("%.02f",rowDataArrayList.get(position).getBill())+" zł";
+        holder.tvRowTotal.setText(bill);
 
         //wyświetla tylko pierwszy wyraz
         String descriptionFull = rowDataArrayList.get(position).getDescription();

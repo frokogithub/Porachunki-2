@@ -148,7 +148,7 @@ public class TransactionActivity extends AppCompatActivity {
                 }else{
                     updateDataList();
                     sortDatalist(dataList);
-                    salda(readInitialBallance());
+                    balance(readInitialBallance());
                     makeJsonFile();
                     addedRowIndex = findAddedRowIndex();
                     HistoryActivity.start(getApplicationContext(), addedRowIndex);
@@ -208,8 +208,8 @@ public class TransactionActivity extends AppCompatActivity {
 
         rd.setDescription(tvDescription.getText().toString());
 
-        rd.setPerson1TransationBalance(calculator.bilans(total, person2Part, person1Part, whoPays)[0]);
-        rd.setPerson2TransationBalance(calculator.bilans(total, person2Part, person1Part, whoPays)[1]);
+        rd.setPerson1TransationBalance(calculator.transactionBalance(total, person2Part, person1Part, whoPays)[0]);
+        rd.setPerson2TransationBalance(calculator.transactionBalance(total, person2Part, person1Part, whoPays)[1]);
 
         dataList.add(0,rd);
     }
@@ -237,21 +237,21 @@ public class TransactionActivity extends AppCompatActivity {
      // licząc salda początkowego (Wcześniej konieczne sortowanie tabeli)
      // Ostatnie (i=0) saldo częściowe jest saldem całkowitym.
      */
-    private void salda(float initialBallance){
-        float saldo = initialBallance;
+    private void balance(float initialBallance){
+        float balance = initialBallance;
         RowData rd = new RowData();
         for(int i = dataList.size()-1; i>=0; i--){
-            float bilansP = dataList.get(i).getPerson1TransationBalance();
-            float bilansR = dataList.get(i).getPerson2TransationBalance();
+            float person1TransationBalance = dataList.get(i).getPerson1TransationBalance();
+            float person2TransationBalance = dataList.get(i).getPerson2TransationBalance();
 
             if(i< dataList.size()-1){
-                saldo = dataList.get(i+1).getBalance() + bilansP-bilansR;
+                balance = dataList.get(i+1).getBalance() + person1TransationBalance-person2TransationBalance;
             }else{
-                saldo =initialBallance + bilansP-bilansR;
+                balance = initialBallance + person1TransationBalance-person2TransationBalance;
             }
-            dataList.get(i).setBalance(saldo);
+            dataList.get(i).setBalance(balance);
         }
-        StartActivity.totalBalance = saldo;
+        StartActivity.totalBalance = balance;
     }
 
     private float readInitialBallance(){

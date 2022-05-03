@@ -9,7 +9,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class DateHelper{
-
+//    Calendar c = Calendar.getInstance();
     Calendar c;
 
     public DateHelper() {

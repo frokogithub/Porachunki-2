@@ -13,20 +13,23 @@ public class Calculator{
 
 
 
-    public float[] bilans(float total, float person2Part, float person1Part, String whoPays){
+    /*
+    transactionBalance oblicza bilans tranzakcji. Bilans niepłacącego to wartość jego "długu",
+    bilans płacącego jest równy 0. Zwraca wynik w postaci dwuelementowej tabeli
+    */
+    public float[] transactionBalance(float bill, float person2Part, float person1Part, String whoPays){
         String person1 = context.getString(R.string.person_1_name);
         float[] array = new float[2];
-        float xR = 0;
-        float xP = 0;
+        float person2TransactionBalance = 0;
+        float person1TransactionBalance = 0;
         if(whoPays.matches(person1)){
-            xR = (total+person2Part-person1Part)/2;
+            person2TransactionBalance = (bill+person2Part-person1Part)/2;
         }else{
-            xP = (total+person1Part-person2Part)/2;
+            person1TransactionBalance = (bill+person1Part-person2Part)/2;
         }
-        array[0] = xP;
-        array[1] = xR;
+        array[0] = person1TransactionBalance;
+        array[1] = person2TransactionBalance;
         return array;
 
-    }
+    }// transactionBalance() END
 }
-//  String mystring = getResources().getString(R.string.mystring);

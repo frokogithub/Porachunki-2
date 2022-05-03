@@ -1,10 +1,10 @@
 <resources>
     <string name="app_name">Porachunki</string>
 
-    <string name="tv_saldo_label">Aktualny stan:</string>
-    <string name="tv_total">Łącznie:</string>
-    <string name="person_1_name">Ewa:</string>
-    <string name="person_2_name">Adam:</string>
+    <string name="tv_saldo_label">Aktualny stan</string>
+    <string name="tv_total">Łącznie</string>
+    <string name="person_1_name">Ewa</string>
+    <string name="person_2_name">Adam</string>
     <string name="tv_Date">Data:</string>
 
     <string name="btn_add_transaction">"Dodaj  Porachunki"</string>

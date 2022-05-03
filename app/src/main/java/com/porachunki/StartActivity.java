@@ -164,11 +164,13 @@ public class StartActivity extends AppCompatActivity {
     private void updateTotalBallance(){
         String totalballanceString;
         String pln = " zł";
+        String person1 = getString(R.string.person_1_name);
+        String person2 = getString(R.string.person_2_name);
 
         if(totalBalance >0){
-            totalballanceString = "Paulina  -"+String.format("%.02f", totalBalance)+pln;
+            totalballanceString = person1+"  -"+String.format("%.02f", totalBalance)+pln;
         }else if(totalBalance <0){
-            totalballanceString = "Robert  -"+String.format("%.02f",-totalBalance)+pln;
+            totalballanceString = person2+"  -"+String.format("%.02f",-totalBalance)+pln;
         }else{
             totalballanceString = "Zobowiązania uregulowane";
         }
