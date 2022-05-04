@@ -148,7 +148,8 @@ public class TransactionActivity extends AppCompatActivity {
                 }else{
                     updateDataList();
                     sortDatalist(dataList);
-                    balance(readInitialBallance());
+                    Calculator c = new Calculator(getApplicationContext());
+                    c.balance();
                     makeJsonFile();
                     addedRowIndex = findAddedRowIndex();
                     HistoryActivity.start(getApplicationContext(), addedRowIndex);
@@ -237,29 +238,29 @@ public class TransactionActivity extends AppCompatActivity {
      // licząc salda początkowego (Wcześniej konieczne sortowanie tabeli)
      // Ostatnie (i=0) saldo częściowe jest saldem całkowitym.
      */
-    private void balance(float initialBallance){
-        float balance = initialBallance;
-        RowData rd = new RowData();
-        for(int i = dataList.size()-1; i>=0; i--){
-            float person1TransationBalance = dataList.get(i).getPerson1TransationBalance();
-            float person2TransationBalance = dataList.get(i).getPerson2TransationBalance();
+//    private void balance(float initialBallance){
+//        float balance = initialBallance;
+//        RowData rd = new RowData();
+//        for(int i = dataList.size()-1; i>=0; i--){
+//            float person1TransationBalance = dataList.get(i).getPerson1TransationBalance();
+//            float person2TransationBalance = dataList.get(i).getPerson2TransationBalance();
+//
+//            if(i< dataList.size()-1){
+//                balance = dataList.get(i+1).getBalance() + person1TransationBalance-person2TransationBalance;
+//            }else{
+//                balance = initialBallance + person1TransationBalance-person2TransationBalance;
+//            }
+//            dataList.get(i).setBalance(balance);
+//        }
+//        StartActivity.totalBalance = balance;
+//    }
 
-            if(i< dataList.size()-1){
-                balance = dataList.get(i+1).getBalance() + person1TransationBalance-person2TransationBalance;
-            }else{
-                balance = initialBallance + person1TransationBalance-person2TransationBalance;
-            }
-            dataList.get(i).setBalance(balance);
-        }
-        StartActivity.totalBalance = balance;
-    }
-
-    private float readInitialBallance(){
-        final String KEY_INITIAL_BALLANCE = "initial_ballance";
-        SharedPreferences sh = getSharedPreferences("MySharedPref", MODE_PRIVATE);
-
-        return sh.getFloat(KEY_INITIAL_BALLANCE, 0);
-    }
+//    private float readInitialBallance(){
+//        final String KEY_INITIAL_BALLANCE = "initial_ballance";
+//        SharedPreferences sh = getSharedPreferences("MySharedPref", MODE_PRIVATE);
+//
+//        return sh.getFloat(KEY_INITIAL_BALLANCE, 0);
+//    }
 
     private void makeJsonFile(){
 
