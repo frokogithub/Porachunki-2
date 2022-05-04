@@ -47,8 +47,8 @@ public class Calculator{
         ArrayList<RowData> dataList = StartActivity.dataList;
         final String KEY_INITIAL_BALLANCE = "initial_ballance";
         SharedPreferences sh = context.getSharedPreferences("MySharedPref", MODE_PRIVATE);
-
         float initialBallance = sh.getFloat(KEY_INITIAL_BALLANCE, 0);
+
         float balance = initialBallance;
         RowData rd = new RowData();
         for(int i = dataList.size()-1; i>=0; i--){
@@ -65,10 +65,5 @@ public class Calculator{
         StartActivity.totalBalance = balance;
     }
 
-//    private float readInitialBallance(){
-//        final String KEY_INITIAL_BALLANCE = "initial_ballance";
-//        SharedPreferences sh = context.getSharedPreferences("MySharedPref", MODE_PRIVATE);
-//
-//        return sh.getFloat(KEY_INITIAL_BALLANCE, 0);
-//    }
+
 }

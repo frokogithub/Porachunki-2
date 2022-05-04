@@ -149,7 +149,10 @@ public class QuicTransactionActivity extends AppCompatActivity {
                     // Informuje następną aktywność o pozycji stworzonego wpisu (potrzebne do zaznaczenia go i wyświetlenia szczegółów transakcji)
                     updateDataList();
                     sortDatalist(dataList);
-                    balance(readInitialBallance());
+
+                    Calculator c = new Calculator(getApplicationContext());
+                    c.balance();
+
                     makeJsonFile();
                     addedRowIndex = findAddedRowIndex();
                     HistoryActivity.start(getApplicationContext(), addedRowIndex);
@@ -233,30 +236,30 @@ public class QuicTransactionActivity extends AppCompatActivity {
     // licząc salda początkowego (Wcześniej konieczne sortowanie tabeli)
     // Ostatnie (i=0) saldo częściowe jest saldem całkowitym.
     */
-    private void balance(float initialBallance){
-        //Log.d("kroko initialBallance", String.valueOf(initialBallance));
-        float ballance = initialBallance;
-        RowData rd = new RowData();
-        for(int i = dataList.size()-1; i>=0; i--){
-            float person1TransationBalance = dataList.get(i).getPerson1TransationBalance();
-            float person2TransationBalance = dataList.get(i).getPerson2TransationBalance();
-
-            if(i<dataList.size()-1){
-                ballance = dataList.get(i+1).getBalance() + person1TransationBalance-person2TransationBalance;
-            }else{
-                ballance =initialBallance + person1TransationBalance-person2TransationBalance;
-            }
-            dataList.get(i).setBalance(ballance);
-        }
-        StartActivity.totalBalance = ballance;
-    }
-
-    private float readInitialBallance(){
-        final String KEY_INITIAL_BALLANCE = "initial_ballance";
-        SharedPreferences sh = getSharedPreferences("MySharedPref", MODE_PRIVATE);
-
-        return sh.getFloat(KEY_INITIAL_BALLANCE, 0);
-    }
+//    private void balance(float initialBallance){
+//        //Log.d("kroko initialBallance", String.valueOf(initialBallance));
+//        float ballance = initialBallance;
+//        RowData rd = new RowData();
+//        for(int i = dataList.size()-1; i>=0; i--){
+//            float person1TransationBalance = dataList.get(i).getPerson1TransationBalance();
+//            float person2TransationBalance = dataList.get(i).getPerson2TransationBalance();
+//
+//            if(i<dataList.size()-1){
+//                ballance = dataList.get(i+1).getBalance() + person1TransationBalance-person2TransationBalance;
+//            }else{
+//                ballance =initialBallance + person1TransationBalance-person2TransationBalance;
+//            }
+//            dataList.get(i).setBalance(ballance);
+//        }
+//        StartActivity.totalBalance = ballance;
+//    }
+//
+//    private float readInitialBallance(){
+//        final String KEY_INITIAL_BALLANCE = "initial_ballance";
+//        SharedPreferences sh = getSharedPreferences("MySharedPref", MODE_PRIVATE);
+//
+//        return sh.getFloat(KEY_INITIAL_BALLANCE, 0);
+//    }
 
     // Z danych tabeli tworzy plik JSON i przekazuje do zapisania
     private void makeJsonFile(){
