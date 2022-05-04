@@ -31,7 +31,6 @@ public class StartActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
         // Hide status bar
         View decorView = getWindow().getDecorView();
         int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
@@ -114,8 +113,9 @@ public class StartActivity extends AppCompatActivity {
 
 //                Log.d("kroko_JSONObject", loadedJsnObject.toString());
 
-                RowData rd = new RowData();
+                RowData rd;
                 for(int i=0; i<jsonArray.length(); i++){
+                    rd = new RowData();
                     rd.setBill((float)jsonArray.getJSONObject(i).getDouble(KEY_BILL));
                     try{
                         date = new SimpleDateFormat("dd.MM.yyyy").parse(jsonArray.getJSONObject(i).getString(KEY_DATE));
@@ -129,8 +129,8 @@ public class StartActivity extends AppCompatActivity {
                     rd.setDescription(jsonArray.getJSONObject(i).getString(KEY_DESCRIPTION));
                     rd.setPerson1TransationBalance((float)jsonArray.getJSONObject(i).getDouble(KEY_PERSON1_TRANSACTION_BALANCE));
                     rd.setPerson2TransationBalance((float)jsonArray.getJSONObject(i).getDouble(KEY_PERSON2_TRANSACTION_BALANCE));
-                    float saldo = (float)jsonArray.getJSONObject(i).getDouble(KEY_BALANCE);
-                    rd.setBalance(saldo);
+                    float balance = (float)jsonArray.getJSONObject(i).getDouble(KEY_BALANCE);
+                    rd.setBalance(balance);
 
                     // Nie wpisuje do tabeli rekordów starszych niż miesiąc
                     if (date.after(monthAgo)){
@@ -140,13 +140,13 @@ public class StartActivity extends AppCompatActivity {
                         // zapisuje saldo z pierwszego niewpisanego rekordu jako saldo początkowe (do funkcji "salda")
                         if( ! isInitialBallanceUpdated){
                             isInitialBallanceUpdated = true;
-                            writeInitialBallance(saldo);
+                            writeInitialBallance(balance);
                         }
                     }
 
                     if(i==0){
                         totalBalance = (float)jsonArray.getJSONObject(i).getDouble(KEY_BALANCE);
-//                        totalBallance = saldo;
+//                        totalBallance = balance;
                     }
 
                 }
@@ -155,7 +155,7 @@ public class StartActivity extends AppCompatActivity {
                 Log.d("kroko_JSON e", "e");
             }
         }else{
-            Log.d("kroko_JSON test", "JSON object NULL");
+            Log.d("kroko_JSON test", "nie ma JSON");
         }
     }
 

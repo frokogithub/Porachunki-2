@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -20,10 +21,7 @@ public class HistoryActivity extends AppCompatActivity {
 
     private ListView lv;
     private CustomAdapter customAdapter;
-    //public static boolean forceSelection = true;
     public static int forceCheckedPosition = 0;
-
-    public float finalSaldo;
 
     TextView tvDate;
     TextView tvTotal;
@@ -36,6 +34,7 @@ public class HistoryActivity extends AppCompatActivity {
 
     private ArrayList<RowData> dataList = StartActivity.dataList;
 
+
     // Starter Pattern
     public static void start(Context context, int justAddedPosition) {
         Intent starter = new Intent(context, HistoryActivity.class);
@@ -46,6 +45,15 @@ public class HistoryActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
+//        String x;
+//        if (dataList==null){
+//            x="nie ma";
+//        }else{
+//            x="jest";
+//        }
+//        Log.d("kroko", x);
+
 
         // Hide status bar
         View decorView = getWindow().getDecorView();
@@ -129,7 +137,7 @@ public class HistoryActivity extends AppCompatActivity {
                 return false;
             }
         });
-    }
+    }// setViews() END
 
     private void fillDetails (int position){
         RowData rd = dataList.get(position);
